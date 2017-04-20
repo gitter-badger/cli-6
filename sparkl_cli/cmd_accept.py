@@ -11,4 +11,4 @@ def command(args):
     Command implementation for accept.
     """
     print "Accept command"
-    print "Name is " + __name__
+    print args
