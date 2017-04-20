@@ -6,11 +6,13 @@ deps:
 
 .PHONY: compile
 compile:
-	@python -m compileall sparkl
+	@pep8 sparkl_cli
+	@pylint sparkl_cli
+	@python -m compileall sparkl_cli
 
 .PHONY: clean
 clean:
-	@rm sparkl/*.pyc
+	@rm sparkl_cli/*.pyc
 
 .PHONY: doc
 doc:
