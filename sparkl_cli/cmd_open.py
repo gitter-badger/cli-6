@@ -6,6 +6,7 @@ Open command implementation.
 """
 
 import os
+import sys
 import requests
 
 from sparkl_cli.common import (
@@ -47,7 +48,7 @@ def open_connection(alias):
     if alias not in connections:
         print "error: no connection {Alias}".format(
             Alias=alias)
-        return
+        sys.exit(1)
 
     host_url = connections[alias]
     request_url = os.path.join(
@@ -77,6 +78,7 @@ def open_connection(alias):
         state.pop("current_connection", None)
         set_state(state)
         print "No SPARKL at " + host_url
+        sys.exit(1)
 
 
 def new_connection(alias, host_url):
@@ -93,7 +95,7 @@ def new_connection(alias, host_url):
     if alias in state["connections"]:
         print "error: {Alias} already open".format(
             Alias=alias)
-        return
+        sys.exit(1)
 
     connections[alias] = host_url
     state["connections"] = connections
@@ -118,3 +120,4 @@ def command(args):
         new_connection(alias, host_url)
     else:
         print "Usage: open [<alias> [<host_url>]]"
+        sys.exit(1)

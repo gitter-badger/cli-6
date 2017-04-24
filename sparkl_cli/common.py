@@ -12,6 +12,7 @@ import json
 import psutil
 
 STATE_FILE = "state.json"
+SESSION_PID = None
 
 
 def get_working_root():
@@ -33,17 +34,17 @@ def get_working_root():
 
 def get_args():
     """
-    Returns the parsed command line arguments.
+    Returns the parsed command and command arguments.
     """
     parser = argparse.ArgumentParser(
         prog=__package__,
         description="SPARKL command line utility.")
 
     parser.add_argument(
-        "-o", "--owner",
+        "-s", "--session",
         type=int,
         default=os.getppid(),
-        help="optional session owner pid")
+        help="optional session id, defaults to invoking pid")
 
     parser.add_argument(
         "cmd",
@@ -61,14 +62,15 @@ def get_args():
 
 def get_working_dir():
     """
-    Returns the working directory for this invocation, which will
-    remain the same for each invocation from a given parent pid.
+    Returns the working directory for this invocation, using the
+    common session id.
 
     The directory is created if necessary.
     """
+
     working_dir = os.path.join(
         get_working_root(),
-        str(os.getppid()))
+        str(SESSION_PID))
 
     if not os.path.exists(working_dir):
         os.makedirs(working_dir)

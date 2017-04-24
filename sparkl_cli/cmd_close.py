@@ -5,6 +5,8 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 Close command implementation.
 """
 
+import sys
+
 from sparkl_cli.common import (
     get_state, set_state)
 
@@ -16,7 +18,7 @@ def command(args):
     argc = len(args)
     if argc == 0:
         print "Usage: close <alias>"
-        return
+        sys.exit(1)
 
     alias = args[0]
 

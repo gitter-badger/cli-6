@@ -16,6 +16,8 @@ Client state between invocations is maintained in the filesystem.
 # import pdb
 # pdb.set_trace()
 
+import sys
+
 from . import (
     common,
     cmd_open,
@@ -35,6 +37,8 @@ def main():
 
     args = common.get_args()
 
+    common.SESSION_PID = args.session
+
     print common.get_working_dir()
 
     if args.cmd in MODULES:
@@ -42,5 +46,6 @@ def main():
         module.command(args.cmd_args)
     else:
         print "Unrecognized command: " + args.cmd
+        sys.exit(1)
 
 main()
