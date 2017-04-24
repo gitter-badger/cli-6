@@ -21,11 +21,13 @@ import sys
 from . import (
     common,
     cmd_open,
-    cmd_close)
+    cmd_close,
+    cmd_session)
 
 MODULES = {
     "open":     cmd_open,
-    "close":    cmd_close}
+    "close":    cmd_close,
+    "session":  cmd_session}
 
 
 def main():
@@ -38,8 +40,6 @@ def main():
     args = common.get_args()
 
     common.SESSION_PID = args.session
-
-    print common.get_working_dir()
 
     if args.cmd in MODULES:
         module = MODULES[args.cmd]
