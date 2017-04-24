@@ -10,17 +10,24 @@ import sys
 from sparkl_cli.common import (
     get_state, set_state)
 
+DESCRIPTION = "Closes the named connection"
+
+
+def parse_args(subparser):
+    """
+    Adds the module-specific subcommand arguments.
+    """
+    subparser.add_argument(
+        "alias",
+        type=str,
+        help="short name of the connection to be closed")
+
 
 def command(args):
     """
     Closes the connection with the given alias, if already open.
     """
-    argc = len(args)
-    if argc == 0:
-        print "Usage: close <alias>"
-        sys.exit(1)
-
-    alias = args[0]
+    alias = args.alias
 
     state = get_state()
     connections = state.get("connections", {})
@@ -33,3 +40,6 @@ def command(args):
             state.pop("current_connection")
 
         set_state(state)
+    else:
+        print "No such connection: " + alias
+        sys.exit(1)

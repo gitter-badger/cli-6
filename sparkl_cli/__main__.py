@@ -16,18 +16,53 @@ Client state between invocations is maintained in the filesystem.
 # import pdb
 # pdb.set_trace()
 
-import sys
+import os
+import argparse
 
 from . import (
     common,
     cmd_open,
     cmd_close,
-    cmd_session)
+    cmd_session,
+    cmd_login,
+    cmd_logout)
 
-MODULES = {
-    "open":     cmd_open,
-    "close":    cmd_close,
-    "session":  cmd_session}
+MODULES = (
+    ("open", cmd_open),
+    ("close", cmd_close),
+    ("session", cmd_session),
+    ("login", cmd_login),
+    ("logout", cmd_logout))
+
+
+def parse_args():
+    """
+    Returns the parsed command and command arguments.
+
+    This calls out to each submodule to parse the command line
+    arguments.
+    """
+    parser = argparse.ArgumentParser(
+        prog=__package__,
+        description="SPARKL command line utility.")
+
+    parser.add_argument(
+        "-s", "--session",
+        type=int,
+        default=os.getppid(),
+        help="optional session id, defaults to invoking pid")
+
+    subparsers = parser.add_subparsers()
+
+    for (cmd, submodule) in MODULES:
+        subparser = subparsers.add_parser(
+            cmd,
+            description=submodule.DESCRIPTION)
+        subparser.set_defaults(
+            fun=submodule.command)
+        submodule.parse_args(subparser)
+
+    return parser.parse_args()
 
 
 def main():
@@ -36,16 +71,8 @@ def main():
     and then dispatches according to the command.
     """
     common.garbage_collect()
-
-    args = common.get_args()
-
+    args = parse_args()
     common.SESSION_PID = args.session
-
-    if args.cmd in MODULES:
-        module = MODULES[args.cmd]
-        module.command(args.cmd_args)
-    else:
-        print "Unrecognized command: " + args.cmd
-        sys.exit(1)
+    args.fun(args)
 
 main()

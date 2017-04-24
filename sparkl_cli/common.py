@@ -4,11 +4,11 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 
 Utility module for common functions.
 """
-import argparse
 import os
 import shutil
 import tempfile
 import json
+import sys
 import psutil
 
 STATE_FILE = "state.json"
@@ -30,34 +30,6 @@ def get_working_root():
         os.makedirs(working_root)
 
     return working_root
-
-
-def get_args():
-    """
-    Returns the parsed command and command arguments.
-    """
-    parser = argparse.ArgumentParser(
-        prog=__package__,
-        description="SPARKL command line utility.")
-
-    parser.add_argument(
-        "-s", "--session",
-        type=int,
-        default=os.getppid(),
-        help="optional session id, defaults to invoking pid")
-
-    parser.add_argument(
-        "cmd",
-        help="the command to execute")
-
-    parser.add_argument(
-        "cmd_args",
-        metavar="arg",
-        type=str,
-        nargs="*",
-        help="the arguments to the command")
-
-    return parser.parse_args()
 
 
 def get_working_dir():
@@ -118,3 +90,33 @@ def set_state(state):
 
     with open(name, "w") as state_file:
         json.dump(state, state_file)
+
+
+def assert_current_connection():
+    """
+    Returns a tuple of the current alias name and the associated
+    connection dict.
+
+    If no connection is current, exits with an error.
+    """
+    state = get_state()
+    current = state.get("current_connection", None)
+    if not current:
+        print "No current connection"
+        sys.exit(1)
+
+    connections = state.get("connections", {})
+    connection = connections.get(current)
+    return (current, connection)
+
+
+def put_connection(alias, connection):
+    """
+    Puts the connection dict into the state object under the
+    given alias name.
+    """
+    state = get_state()
+    connections = state.get("connections", {})
+    connections[alias] = connection
+    state["connections"] = connections
+    set_state(state)

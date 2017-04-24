@@ -5,12 +5,31 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 Open command implementation.
 """
 
-import os
 import sys
+import posixpath
 import requests
 
 from sparkl_cli.common import (
     get_state, set_state)
+
+DESCRIPTION = "Opens a connection alias, using url if supplied."
+
+
+def parse_args(subparser):
+    """
+    Module-specific subcommand arguments.
+    """
+    subparser.add_argument(
+        "alias",
+        nargs="?",
+        type=str,
+        help="short name for the connection, e.g. local")
+
+    subparser.add_argument(
+        "url",
+        nargs="?",
+        type=str,
+        help="url pointing to the SPARKL node, e.g. http://localhost:8000")
 
 
 def show_connections():
@@ -48,12 +67,12 @@ def open_connection(alias):
     connection = connections.get(alias, None)
 
     if not connection:
-        print "error: no connection {Alias}".format(
+        print "No connection {Alias}".format(
             Alias=alias)
         sys.exit(1)
 
     host_url = connection.get("host_url")
-    request_url = os.path.join(
+    request_url = posixpath.join(
         host_url, "sse/ping")
 
     try:
@@ -112,16 +131,9 @@ def command(args):
     Opens a new connection and makes it current, or makes an existing
     connection current, or shows existing connections.
     """
-    argc = len(args)
-    if argc == 0:
+    if not args.alias and not args.url:
         show_connections()
-    elif argc == 1:
-        alias = args[0]
-        open_connection(alias)
-    elif argc == 2:
-        alias = args[0]
-        host_url = args[1]
-        new_connection(alias, host_url)
+    elif args.alias and not args.url:
+        open_connection(args.alias)
     else:
-        print "Usage: open [<alias> [<host_url>]]"
-        sys.exit(1)
+        new_connection(args.alias, args.url)
