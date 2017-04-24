@@ -13,6 +13,11 @@ def command(args):
     """
     Closes the connection with the given alias, if already open.
     """
+    argc = len(args)
+    if argc == 0:
+        print "Usage: close <alias>"
+        return
+
     alias = args[0]
 
     state = get_state()

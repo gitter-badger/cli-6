@@ -18,10 +18,14 @@ def show_connections():
     """
     state = get_state()
     connections = state.get("connections", {})
+    current = state.get("current_connection", None)
     count = len(connections)
 
     if count > 0:
         for alias in connections:
+            if alias == current:
+                print "*",
+
             print "{Alias}: {HostUrl}".format(
                 Alias=alias,
                 HostUrl=connections[alias])
@@ -61,7 +65,7 @@ def open_connection(alias):
         state["current_connection"] = alias
         set_state(state)
 
-        print "alias: " + alias
+        print "current: " + alias
         print "url: " + host_url
         attrs = response.json()["attr"]
         for key in attrs:
@@ -99,11 +103,8 @@ def new_connection(alias, host_url):
 
 def command(args):
     """
-    Opens a connection and associates it with the alias.
-
-    The connection is checked by doing an /sse/ping. If anything
-    other than a 200 OK response comes back, the connection fails
-    and state remains unchanged.
+    Opens a new connection and makes it current, or makes an existing
+    connection current, or shows existing connections.
     """
     argc = len(args)
     if argc == 0:
