@@ -27,9 +27,10 @@ def show_connections():
             if alias == current:
                 print "*",
 
+            connection = connections[alias]
             print "{Alias}: {HostUrl}".format(
                 Alias=alias,
-                HostUrl=connections[alias])
+                HostUrl=connection["host_url"])
     else:
         print "No open connections"
 
@@ -44,13 +45,14 @@ def open_connection(alias):
     """
     state = get_state()
     connections = state.get("connections", {})
+    connection = connections.get(alias, None)
 
-    if alias not in connections:
+    if not connection:
         print "error: no connection {Alias}".format(
             Alias=alias)
         sys.exit(1)
 
-    host_url = connections[alias]
+    host_url = connection.get("host_url")
     request_url = os.path.join(
         host_url, "sse/ping")
 
@@ -97,7 +99,9 @@ def new_connection(alias, host_url):
             Alias=alias)
         sys.exit(1)
 
-    connections[alias] = host_url
+    connection = {
+        "host_url": host_url}
+    connections[alias] = connection
     state["connections"] = connections
     set_state(state)
     open_connection(alias)
