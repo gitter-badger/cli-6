@@ -12,11 +12,18 @@ of the command files to work:
 Client state between invocations is maintained in the filesystem.
 """
 
-from . import common
-from . import cmd_accept
+# Uncomment the following two lines for trace debug.
+# import pdb
+# pdb.set_trace()
 
-COMMANDS = {
-    "accept": cmd_accept.command}
+from . import (
+    common,
+    cmd_open,
+    cmd_close)
+
+MODULES = {
+    "open":     cmd_open,
+    "close":    cmd_close}
 
 
 def main():
@@ -26,20 +33,14 @@ def main():
     """
     common.garbage_collect()
 
-    working_dir = common.get_working_dir()
     args = common.get_args()
 
-    print "Command is " + args.cmd
-    print "Package is " + __package__
-    print "Name is " + __name__
-    print working_dir
-    print args.args
+    print common.get_working_dir()
 
-    try:
-        dispatch = COMMANDS[args.cmd]
-        dispatch(args.args)
-    except KeyError:
+    if args.cmd in MODULES:
+        module = MODULES[args.cmd]
+        module.command(args.cmd_args)
+    else:
         print "Unrecognized command: " + args.cmd
 
-if __name__ == "__main__":
-    main()
+main()
