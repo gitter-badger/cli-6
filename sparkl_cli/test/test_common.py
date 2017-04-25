@@ -9,6 +9,7 @@ import os
 
 from .. import common
 
+
 class CommonTests(unittest.TestCase):
     """
     Basic tests of the common module.
