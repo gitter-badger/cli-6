@@ -25,9 +25,10 @@ test:
 .PHONY: rel
 rel: clean compile
 	@sed s/{{version}}/\"`git describe --always`\"/ setup.py.src > setup.py
+	@pandoc -o README.txt README.md
 	@python setup.py sdist
 
 .PHONY: clean_rel
 clean_rel:
-	@rm -f setup.py
+	@rm -f setup.py README.txt
 	@rm -rf dist

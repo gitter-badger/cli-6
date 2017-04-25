@@ -1,6 +1,9 @@
 # setup.py is generated from setup.py.src by make rel target.
 setup.py
 
+# README.txt is generated using pandoc from README.md
+README.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
