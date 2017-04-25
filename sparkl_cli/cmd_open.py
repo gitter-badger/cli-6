@@ -45,11 +45,11 @@ def show_connections():
     if count > 0:
         for alias in connections:
             if alias == current:
-                print("*")
+                print("*", end=" ")
 
             connection = connections[alias]
             host_url = connection["host_url"]
-            print(alias, ":", host_url)
+            print(alias, host_url)
     else:
         print("No open connections")
 
@@ -67,7 +67,7 @@ def open_connection(alias):
     connection = connections.get(alias, None)
 
     if not connection:
-        print("No connection:", alias)
+        print("No connection", alias)
         sys.exit(1)
 
     host_url = connection.get("host_url")
@@ -90,7 +90,7 @@ def open_connection(alias):
         print("url:", host_url)
         attrs = response.json()["attr"]
         for key in attrs:
-            print(key, ":", attrs[key])
+            print(key, attrs[key])
 
     except BaseException:
         connections.pop(alias, None)
@@ -112,7 +112,7 @@ def new_connection(alias, host_url):
     state = get_state()
     connections = state.get("connections", {})
 
-    if alias in state["connections"]:
+    if alias in connections:
         print(alias, "already open")
         sys.exit(1)
 

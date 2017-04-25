@@ -41,7 +41,7 @@ def show_login():
     (alias, connection) = assert_current_connection()
     user = connection.get("user", None)
     if user:
-        print(alias + ": " + user)
+        print(alias, user)
     else:
         print("No user logged in to", alias)
 

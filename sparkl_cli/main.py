@@ -75,4 +75,6 @@ def main():
     common.SESSION_PID = args.session
     args.fun(args)
 
-main()
+# Allow invocation using `python -m sparkl_cli.main`
+if __name__ == "__main__":
+    main()
