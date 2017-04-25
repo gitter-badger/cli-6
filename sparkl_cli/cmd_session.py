@@ -29,8 +29,8 @@ def command(_):
     """
     working_dir = get_working_dir()
 
-    print("session_dir:", working_dir)
-    print("session_state:")
+    print("dir", working_dir)
+    print("state")
     json.dump(
         get_state(), sys.stdout,
         indent=2)

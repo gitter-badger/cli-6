@@ -7,12 +7,12 @@ deps:
 .PHONY: compile
 compile:
 	@pep8 sparkl_cli
-	@pylint sparkl_cli
+	@pylint --ignore=test sparkl_cli
 	@python -m compileall sparkl_cli
 
 .PHONY: clean
 clean:
-	@rm -f sparkl_cli/*.pyc
+	@find . -name "*.pyc" | xargs rm
 
 .PHONY: doc
 doc:
@@ -20,7 +20,7 @@ doc:
 
 .PHONY: test
 test:
-	@echo No tests.
+	@python -m unittest discover
 
 .PHONY: rel
 rel: clean compile
