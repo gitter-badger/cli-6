@@ -24,9 +24,10 @@ test:
 
 .PHONY: rel
 rel: clean compile
-	@sed s/{{version}}/\"`git describe`\"/ setup.py.src > setup.py
+	@sed s/{{version}}/\"`git describe --always`\"/ setup.py.src > setup.py
 	@python setup.py sdist
 
 .PHONY: clean_rel
 clean_rel:
+	@rm -f setup.py
 	@rm -rf dist

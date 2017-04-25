@@ -17,4 +17,5 @@ setup(
   author="Jacoby Thwaites",
   author_email="dev@sparkl.com",
   version={{version}},
+  scripts=["sparkl"],
   packages=["sparkl_cli"])

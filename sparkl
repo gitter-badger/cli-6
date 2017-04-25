@@ -1,0 +1,2 @@
+#!/bin/sh
+SPARKL_PROG_NAME=`basename $0` python -m sparkl_cli $@

@@ -16,5 +16,6 @@ setup(
   url="sparkl.com",
   author="Jacoby Thwaites",
   author_email="dev@sparkl.com",
-  version="v1.0.0",
+  version="v1.0.0-1-g047ac1c",
+  scripts=["sparkl"],
   packages=["sparkl_cli"])

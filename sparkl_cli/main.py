@@ -42,9 +42,17 @@ def parse_args():
     This calls out to each submodule to parse the command line
     arguments.
     """
+    prog_name = os.environ.get("SPARKL_PROG_NAME", None)
+    if not prog_name:
+        prog_name = __package__
+
+    epilog = "Use '{ProgName} <cmd> -h' for subcommand help".format(
+        ProgName=prog_name)
+
     parser = argparse.ArgumentParser(
-        prog=__package__,
-        description="SPARKL command line utility.")
+        prog=prog_name,
+        description="SPARKL command line utility.",
+        epilog=epilog)
 
     parser.add_argument(
         "-s", "--session",
