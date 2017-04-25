@@ -4,6 +4,8 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 
 Utility module for common functions.
 """
+from __future__ import print_function
+
 import os
 import shutil
 import tempfile
@@ -102,7 +104,7 @@ def assert_current_connection():
     state = get_state()
     current = state.get("current_connection", None)
     if not current:
-        print "No current connection"
+        print("No current connection")
         sys.exit(1)
 
     connections = state.get("connections", {})

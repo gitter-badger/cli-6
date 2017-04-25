@@ -4,6 +4,7 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 
 Close command implementation.
 """
+from __future__ import print_function
 
 import sys
 
@@ -41,5 +42,5 @@ def command(args):
 
         set_state(state)
     else:
-        print "No such connection: " + alias
+        print("No such connection:", alias)
         sys.exit(1)

@@ -4,6 +4,7 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 
 Login command implementation.
 """
+from __future__ import print_function
 
 import sys
 import posixpath
@@ -40,9 +41,9 @@ def show_login():
     (alias, connection) = assert_current_connection()
     user = connection.get("user", None)
     if user:
-        print alias + ": " + user
+        print(alias + ": " + user)
     else:
-        print "No user logged in to " + alias
+        print("No user logged in to", alias)
 
 
 def login(email, password):
@@ -52,7 +53,7 @@ def login(email, password):
     (alias, connection) = assert_current_connection()
     user = connection.get("user", None)
     if user:
-        print "User already logged in: " + user
+        print("User already logged in:", user)
         sys.exit(1)
 
     host_url = connection.get("host_url")
@@ -73,7 +74,7 @@ def login(email, password):
         put_connection(alias, connection)
 
     except BaseException:
-        print "Failed to login: " + email
+        print("Failed to login:", email)
         sys.exit(1)
 
 

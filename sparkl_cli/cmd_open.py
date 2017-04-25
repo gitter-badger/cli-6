@@ -4,6 +4,7 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 
 Open command implementation.
 """
+from __future__ import print_function
 
 import sys
 import posixpath
@@ -44,14 +45,13 @@ def show_connections():
     if count > 0:
         for alias in connections:
             if alias == current:
-                print "*",
+                print("*")
 
             connection = connections[alias]
-            print "{Alias}: {HostUrl}".format(
-                Alias=alias,
-                HostUrl=connection["host_url"])
+            host_url = connection["host_url"]
+            print(alias, ":", host_url)
     else:
-        print "No open connections"
+        print("No open connections")
 
 
 def open_connection(alias):
@@ -67,8 +67,7 @@ def open_connection(alias):
     connection = connections.get(alias, None)
 
     if not connection:
-        print "No connection {Alias}".format(
-            Alias=alias)
+        print("No connection:", alias)
         sys.exit(1)
 
     host_url = connection.get("host_url")
@@ -87,18 +86,18 @@ def open_connection(alias):
         state["current_connection"] = alias
         set_state(state)
 
-        print "current: " + alias
-        print "url: " + host_url
+        print("current:", alias)
+        print("url:", host_url)
         attrs = response.json()["attr"]
         for key in attrs:
-            print key + ": " + attrs[key]
+            print(key, ":", attrs[key])
 
     except BaseException:
         connections.pop(alias, None)
         state["connections"] = connections
         state.pop("current_connection", None)
         set_state(state)
-        print "No SPARKL at " + host_url
+        print("No SPARKL at", host_url)
         sys.exit(1)
 
 
@@ -114,8 +113,7 @@ def new_connection(alias, host_url):
     connections = state.get("connections", {})
 
     if alias in state["connections"]:
-        print "error: {Alias} already open".format(
-            Alias=alias)
+        print(alias, "already open")
         sys.exit(1)
 
     connection = {

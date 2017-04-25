@@ -4,6 +4,7 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 
 Session command implementation.
 """
+from __future__ import print_function
 
 import sys
 import json
@@ -28,10 +29,9 @@ def command(args):
     """
     working_dir = get_working_dir()
 
-    print "session_dir: {SessionDir}".format(
-        SessionDir=working_dir)
-    print "session_state:"
+    print("session_dir:", working_dir)
+    print("session_state:")
     json.dump(
         get_state(), sys.stdout,
         indent=2)
-    print
+    print()

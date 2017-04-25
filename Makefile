@@ -12,7 +12,7 @@ compile:
 
 .PHONY: clean
 clean:
-	@rm sparkl_cli/*.pyc
+	@rm -f sparkl_cli/*.pyc
 
 .PHONY: doc
 doc:

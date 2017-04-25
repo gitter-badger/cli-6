@@ -4,6 +4,7 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 
 Logout command implementation.
 """
+from __future__ import print_function
 
 import sys
 import posixpath
@@ -30,7 +31,7 @@ def logout():
     (alias, connection) = assert_current_connection()
     user = connection.get("user", None)
     if not user:
-        print "No user logged in to " + alias
+        print("No user logged in to", alias)
         sys.exit(1)
 
     host_url = connection.get("host_url")
@@ -48,7 +49,7 @@ def logout():
         put_connection(alias, connection)
 
     except BaseException:
-        print "Failed to logout"
+        print("Failed to logout")
         sys.exit(1)
 
 
