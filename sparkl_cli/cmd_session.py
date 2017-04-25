@@ -23,7 +23,7 @@ def parse_args(_):
     return
 
 
-def command(args):
+def command(_):
     """
     Shows the session directory.
     """
