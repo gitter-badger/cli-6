@@ -60,7 +60,8 @@ def open_connection(alias):
 
     If the connection is valid, prints the connection info.
 
-    If the connection is invalid, removes it from the state.
+    If the connection is invalid, removes it from the state and
+    clears the current connection (leaving no current connection).
     """
     state = get_state()
     connections = state.get("connections", {})
@@ -78,7 +79,8 @@ def open_connection(alias):
         response = requests.get(
             request_url,
             headers={
-                "Accept": "application/json"})
+                "Accept": "application/json"},
+            timeout=3)
 
         if response.status_code != 200:
             raise ValueError("Received error response")
@@ -107,7 +109,8 @@ def new_connection(alias, host_url):
     making it the current open connection.
 
     Prints the ping info if connection is valid.
-    Prints an error if the connection cannot be opened.
+    Prints an error if the connection cannot be opened. This will cause
+    there to be no current connection.
     """
     state = get_state()
     connections = state.get("connections", {})

@@ -23,4 +23,10 @@ test:
 	@echo No tests.
 
 .PHONY: rel
-rel: compile
+rel: clean compile
+	@sed s/{{version}}/\"`git describe`\"/ setup.py.src > setup.py
+	@python setup.py sdist
+
+.PHONY: clean_rel
+clean_rel:
+	@rm -rf dist
