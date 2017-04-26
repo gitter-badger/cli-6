@@ -9,7 +9,11 @@ from __future__ import print_function
 from sparkl_cli.common import (
     sync_request)
 
-DESCRIPTION = "Lists content of specified folder"
+DESCRIPTION = """\
+    Lists content of specified folder or service.
+    Each line shows the type, id and name of a folder
+    entry; or the type and id of a service instance.
+    """
 
 
 def parse_args(subparser):
