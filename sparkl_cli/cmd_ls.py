@@ -19,7 +19,9 @@ def parse_args(subparser):
     subparser.add_argument(
         "folder",
         type=str,
-        help="folder path relative to root of logged in user")
+        nargs="?",
+        default="/",
+        help="folder id or path")
 
 
 def list_folder(args):
@@ -30,9 +32,16 @@ def list_folder(args):
         args.alias, "GET", "sse_cfg/content/" + args.folder)
 
     if response:
-        content = response.json()["content"]
-        for entry in content:
-            print(entry["tag"], entry["attr"]["name"])
+        if "content" in response.json():
+            content = response.json()["content"]
+            for entry in content:
+                print(
+                    entry["tag"],
+                    entry["attr"]["id"],
+                    entry["attr"].get("name", ""),
+                    sep="\t")
+        else:
+            print("No content")
     else:
         print("Cannot list folder", args.folder)
 

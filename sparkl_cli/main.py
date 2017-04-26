@@ -26,9 +26,10 @@ from . import (
     cmd_session,
     cmd_login,
     cmd_logout,
-    cmd_list,
+    cmd_ls,
     cmd_get,
-    cmd_put)
+    cmd_put,
+    cmd_rm)
 
 MODULES = (
     ("connect", cmd_connect),
@@ -36,9 +37,10 @@ MODULES = (
     ("session", cmd_session),
     ("login", cmd_login),
     ("logout", cmd_logout),
-    ("list", cmd_list),
+    ("ls", cmd_ls),
     ("get", cmd_get),
-    ("put", cmd_put))
+    ("put", cmd_put),
+    ("rm", cmd_rm))
 
 
 def parse_args():

@@ -24,7 +24,7 @@ def parse_args(subparser):
     subparser.add_argument(
         "folder",
         type=str,
-        help="folder into which the change is placed")
+        help="folder id or path, into which the change is placed")
 
 
 def command(args):
