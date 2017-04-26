@@ -25,6 +25,12 @@ def parse_args(subparser):
         help="object path relative to root of logged in user")
 
     subparser.add_argument(
+        "file",
+        type=str,
+        nargs="?",
+        help="optional name of file to save output")
+
+    subparser.add_argument(
         "-f", "--format",
         type=str,
         default="xml",
@@ -34,11 +40,6 @@ def parse_args(subparser):
         "-p", "--pretty",
         action="store_true",
         help="pretty print output")
-
-    subparser.add_argument(
-        "-o", "--output",
-        type=str,
-        help="save output in file OUTPUT")
 
 
 def prettify(args, output):
@@ -79,8 +80,8 @@ def command(args):
         if args.pretty:
             output = prettify(args, output)
 
-        if args.output:
-            save(args.output, output)
+        if args.file:
+            save(args.file, output)
         else:
             print(output)
     else:

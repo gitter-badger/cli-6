@@ -162,6 +162,7 @@ def sync_request(
         params=None,
         data=None,
         accept="json",
+        headers=None,
         timeout=DEFAULT_TIMEOUT):
     """
     Makes a request on the specified connection, using
@@ -181,8 +182,9 @@ def sync_request(
 
     base = connection.get("url")
     request_url = urlparse.urljoin(base, href)
-    headers = {
-        "Accept": "application/" + accept}
+    if not headers:
+        headers = {}
+    headers["Accept"] = "application/" + accept
 
     try:
         if method.upper() == "GET":
