@@ -34,7 +34,7 @@ def list_folder(args):
         for entry in content:
             print(entry["tag"], entry["attr"]["name"])
     else:
-        print("Cannot list folder")
+        print("Cannot list folder", args.folder)
 
 
 def command(args):

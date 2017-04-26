@@ -43,6 +43,7 @@ def show_login(args):
         args.alias, "GET", "sse_cfg/user")
 
     if response:
+        print("alias", args.alias)
         attrs = response.json()["attr"]
         for key in attrs:
             print(key, attrs[key])
