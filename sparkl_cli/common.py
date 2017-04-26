@@ -211,3 +211,37 @@ def sync_request(
     except BaseException as exception:
         print(exception)
         return None
+
+
+def show_struct(json_object, indent=0):
+    """
+    Renders line-based display of json struct content
+    suitable for command-line use.
+
+    Indent is increased in recursive calls.
+    """
+    def indent_print(*args):
+        """
+        Indents and prints the text.
+        """
+        for _ in range(0, indent):
+            print("\t", end="")
+        print(*args, sep="\t")
+
+    if not isinstance(json_object, dict):
+        indent_print(json_object)
+        return
+
+    tag = json_object["tag"]
+    indent_print(tag)
+    indent_print("-" * len(tag))
+
+    if "attr" in json_object:
+        for key in json_object["attr"]:
+            indent_print(
+                key,
+                json_object["attr"][key])
+
+    if "content" in json_object:
+        for content_object in json_object["content"]:
+            show_struct(content_object, indent + 1)
