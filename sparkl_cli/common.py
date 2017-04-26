@@ -229,12 +229,16 @@ def show_struct(json_object, indent=0):
         print(*args, sep="\t")
 
     if not isinstance(json_object, dict):
-        indent_print(json_object)
+        print("~~~~")
+        print(json_object)
+        print("~~~~")
         return
 
+    if indent > 0:
+        print()
+
     tag = json_object["tag"]
-    indent_print(tag)
-    indent_print("-" * len(tag))
+    indent_print("tag", tag)
 
     if "attr" in json_object:
         for key in json_object["attr"]:
