@@ -42,7 +42,12 @@ def show_login(args):
     response = sync_request(
         args.alias, "GET", "sse_cfg/user")
 
-    print(response)
+    if response:
+        attrs = response.json()["attr"]
+        for key in attrs:
+            print(key, attrs[key])
+    else:
+        print("Connection error on", args.alias)
 
 
 def login(args):

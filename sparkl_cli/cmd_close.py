@@ -9,7 +9,7 @@ from __future__ import print_function
 from sparkl_cli.common import (
     get_state,
     set_state,
-    del_cookie_jar)
+    delete_cookies)
 
 DESCRIPTION = "Closes the named connection"
 
@@ -31,7 +31,7 @@ def command(args):
     connections = state.get("connections", {})
 
     if connections.get(alias):
-        del_cookie_jar(alias)
+        delete_cookies(alias)
         connections.pop(alias)
         set_state(state)
     else:

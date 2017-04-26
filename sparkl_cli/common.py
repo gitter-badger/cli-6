@@ -11,7 +11,7 @@ import shutil
 import tempfile
 import json
 import urlparse
-import cookielib
+import pickle
 import requests
 import psutil
 
@@ -122,24 +122,33 @@ def put_connection(alias, connection):
     set_state(state)
 
 
-def get_cookie_jar(alias):
+def pickle_cookies(alias, cookies):
     """
-    Gets the cookie jar for the given alias, creating it
-    if necessary.
+    Pickles the cookies object for later retrieval.
     """
     cookie_file = os.path.join(
         get_working_dir(), alias + ".cookies")
-    cookie_jar = cookielib.LWPCookieJar(cookie_file)
+    with open(cookie_file, "wb") as cookie_jar:
+        pickle.dump(cookies, cookie_jar)
+
+
+def unpickle_cookies(alias):
+    """
+    Unpickles the cookies file and returns the original object.
+
+    If no file exists, then an empty
+    """
+    cookie_file = os.path.join(
+        get_working_dir(), alias + ".cookies")
     try:
-        cookie_jar.load()
+        with open(cookie_file, "rb") as cookie_jar:
+            cookies = pickle.load(cookie_jar)
     except BaseException:
-        # Cookie file doesn't exist yet.
-        pass
-
-    return cookie_jar
+        cookies = requests.cookies.RequestsCookieJar()
+    return cookies
 
 
-def del_cookie_jar(alias):
+def delete_cookies(alias):
     """
     Deletes the cookie jar for the given alias.
     """
@@ -167,7 +176,9 @@ def sync_request(
     exception occurred.
     """
     connection = get_connection(alias)
-    cookies = get_cookie_jar(alias)
+    session = requests.Session()
+    session.cookies = unpickle_cookies(alias)
+
     base = connection.get("url")
     request_url = urlparse.urljoin(base, href)
     headers = {
@@ -175,24 +186,22 @@ def sync_request(
 
     try:
         if method.upper() == "GET":
-            response = requests.get(
+            response = session.get(
                 request_url,
                 headers=headers,
                 params=params,
-                timeout=timeout,
-                cookies=cookies)
-            cookies.save(ignore_discard=True)
+                timeout=timeout)
+            pickle_cookies(alias, session.cookies)
             return response
 
         if method.upper() == "POST":
-            response = requests.post(
+            response = session.post(
                 request_url,
                 headers=headers,
                 params=params,
                 data=data,
-                timeout=timeout,
-                cookies=cookies)
-            cookies.save(ignore_discard=True)
+                timeout=timeout)
+            pickle_cookies(alias, session.cookies)
             return response
 
         return None
