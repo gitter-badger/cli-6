@@ -30,5 +30,5 @@ rel: clean compile
 
 .PHONY: clean_rel
 clean_rel:
-	@rm -f setup.py README.txt
+	@rm -f setup.py README.txt MANIFEST
 	@rm -rf dist
