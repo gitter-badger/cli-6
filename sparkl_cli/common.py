@@ -10,11 +10,17 @@ import os
 import shutil
 import tempfile
 import json
-import sys
+import urlparse
+import cookielib
+import requests
 import psutil
 
 STATE_FILE = "state.json"
+DEFAULT_TIMEOUT = 3
+
+# Set by main module.
 SESSION_PID = None
+ALIAS = None
 
 
 def get_working_root():
@@ -94,22 +100,15 @@ def set_state(state):
         json.dump(state, state_file)
 
 
-def assert_current_connection():
+def get_connection(alias):
     """
-    Returns a tuple of the current alias name and the associated
-    connection dict.
+    Gets the specified connection from the state object.
 
-    If no connection is current, exits with an error.
+    Throws an exception if no such connection alias exists.
     """
     state = get_state()
-    current = state.get("current_connection", None)
-    if not current:
-        print("No current connection")
-        sys.exit(1)
-
     connections = state.get("connections", {})
-    connection = connections.get(current)
-    return (current, connection)
+    return connections[alias]
 
 
 def put_connection(alias, connection):
@@ -120,5 +119,84 @@ def put_connection(alias, connection):
     state = get_state()
     connections = state.get("connections", {})
     connections[alias] = connection
-    state["connections"] = connections
     set_state(state)
+
+
+def get_cookie_jar(alias):
+    """
+    Gets the cookie jar for the given alias, creating it
+    if necessary.
+    """
+    cookie_file = os.path.join(
+        get_working_dir(), alias + ".cookies")
+    cookie_jar = cookielib.LWPCookieJar(cookie_file)
+    try:
+        cookie_jar.load()
+    except BaseException:
+        # Cookie file doesn't exist yet.
+        pass
+
+    return cookie_jar
+
+
+def del_cookie_jar(alias):
+    """
+    Deletes the cookie jar for the given alias.
+    """
+    cookie_file = os.path.join(
+        get_working_dir(), alias + ".cookies")
+    os.remove(cookie_file)
+
+
+def sync_request(
+        alias, method, href,
+        params=None,
+        data=None,
+        accept="json",
+        timeout=DEFAULT_TIMEOUT):
+    """
+    Makes a request on the specified connection, using
+    the connection session state including session cookies.
+
+    Method can be 'GET' or 'POST' upper or lower case.
+    Href is relative to the base url, e.g. 'sse_cfg/user'.
+    Params is a dict, or None.
+    Body is a string, or None, used in POST request only.
+
+    Returns a response object, or None if an HTTP request
+    exception occurred.
+    """
+    connection = get_connection(alias)
+    cookies = get_cookie_jar(alias)
+    base = connection.get("url")
+    request_url = urlparse.urljoin(base, href)
+    headers = {
+        "Accept": "application/" + accept}
+
+    try:
+        if method.upper() == "GET":
+            response = requests.get(
+                request_url,
+                headers=headers,
+                params=params,
+                timeout=timeout,
+                cookies=cookies)
+            cookies.save(ignore_discard=True)
+            return response
+
+        if method.upper() == "POST":
+            response = requests.post(
+                request_url,
+                headers=headers,
+                params=params,
+                data=data,
+                timeout=timeout,
+                cookies=cookies)
+            cookies.save(ignore_discard=True)
+            return response
+
+        return None
+
+    except BaseException as exception:
+        print(exception)
+        return None

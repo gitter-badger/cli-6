@@ -6,14 +6,10 @@ Login command implementation.
 """
 from __future__ import print_function
 
-import sys
-import posixpath
 import getpass
-import requests
 
 from sparkl_cli.common import (
-    assert_current_connection,
-    put_connection)
+    sync_request)
 
 DESCRIPTION = "Logs in, or registers, the specified user with password."
 
@@ -38,16 +34,15 @@ def parse_args(subparser):
         help="password of user. Omit to be prompted.")
 
 
-def show_login():
+def show_login(args):
     """
-    Shows the logged in user, if any, on the currently open connection.
+    Shows the logged in user on the connection specified in
+    the args, or default.
     """
-    (alias, connection) = assert_current_connection()
-    user = connection.get("user", None)
-    if user:
-        print(alias, user)
-    else:
-        print("No user logged in to", alias)
+    response = sync_request(
+        args.alias, "GET", "sse_cfg/user")
+
+    print(response)
 
 
 def login(args):
@@ -55,38 +50,17 @@ def login(args):
     Logs in the specified user, prompting for password
     if necessary.
     """
-    (alias, connection) = assert_current_connection()
-    user = connection.get("user", None)
-    if user:
-        print("User already logged in:", user)
-        sys.exit(1)
+    if not args.password:
+        args.password = getpass.getpass("Password: ")
 
-    user = args.user
-    password = args.password
+    response = sync_request(
+        args.alias, "POST", "sse_cfg/user",
+        data={
+            "email": args.user,
+            "password": args.password})
 
-    if not password:
-        password = getpass.getpass("Password: ")
-
-    host_url = connection.get("host_url")
-    post_url = posixpath.join(
-        host_url, "sse_cfg/user")
-
-    try:
-        response = requests.post(
-            post_url,
-            data={
-                "email": user,
-                "password": password})
-
-        if response.status_code != 200:
-            raise ValueError("Received error response")
-
-        connection["user"] = user
-        put_connection(alias, connection)
-
-    except BaseException:
-        print("Failed to login:", user)
-        sys.exit(1)
+    if not response:
+        print("Login failed")
 
 
 def register(args):
@@ -94,42 +68,21 @@ def register(args):
     Registers the specified user, prompting twice for
     password if necessary.
     """
-    (alias, connection) = assert_current_connection()
-    user = connection.get("user", None)
-    if user:
-        print("User already logged in:", user)
-        sys.exit(1)
-
-    user = args.user
-    password = args.password
-
-    if not password:
-        password = getpass.getpass("Password: ")
+    if not args.password:
+        args.password = getpass.getpass("Password: ")
         check = getpass.getpass("Repeat: ")
-        if password != check:
+        if args.password != check:
             print("Passwords do not match")
-            sys.exit(1)
+            return
 
-    host_url = connection.get("host_url")
-    post_url = posixpath.join(
-        host_url, "sse_cfg/register")
+    response = sync_request(
+        args.alias, "POST", "sse_cfg/register",
+        data={
+            "email": args.user,
+            "password": args.password})
 
-    try:
-        response = requests.post(
-            post_url,
-            data={
-                "email": user,
-                "password": password})
-
-        if response.status_code != 200:
-            raise ValueError("Received error response")
-
-        connection["user"] = user
-        put_connection(alias, connection)
-
-    except BaseException:
-        print("Failed to register:", user)
-        sys.exit(1)
+    if not response:
+        print("Register user failed")
 
 
 def command(args):
@@ -138,7 +91,7 @@ def command(args):
     the current login status.
     """
     if not args.user:
-        show_login()
+        show_login(args)
     elif args.register:
         register(args)
     else:

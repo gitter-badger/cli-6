@@ -21,14 +21,14 @@ import argparse
 
 from . import (
     common,
-    cmd_open,
+    cmd_connect,
     cmd_close,
     cmd_session,
     cmd_login,
     cmd_logout)
 
 MODULES = (
-    ("open", cmd_open),
+    ("connect", cmd_connect),
     ("close", cmd_close),
     ("session", cmd_session),
     ("login", cmd_login),
@@ -55,6 +55,12 @@ def parse_args():
         epilog=epilog)
 
     parser.add_argument(
+        "-a", "--alias",
+        type=str,
+        default="default",
+        help="optional alias for multiple connections")
+
+    parser.add_argument(
         "-s", "--session",
         type=int,
         default=os.getppid(),
@@ -75,12 +81,15 @@ def parse_args():
 
 def main():
     """
-    Main function performs a garbage collection of temp directories
-    and then dispatches according to the command.
+    Main function performs a garbage collection of temp directories.
+
+    It sets the common.GLOBAL values, and then dispatches according
+    to the command.
     """
     common.garbage_collect()
     args = parse_args()
     common.SESSION_PID = args.session
+    common.ALIAS = args.alias
     args.fun(args)
 
 # Allow invocation using `python -m sparkl_cli.main`

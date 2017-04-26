@@ -6,22 +6,19 @@ Close command implementation.
 """
 from __future__ import print_function
 
-import sys
-
 from sparkl_cli.common import (
-    get_state, set_state)
+    get_state,
+    set_state,
+    del_cookie_jar)
 
 DESCRIPTION = "Closes the named connection"
 
 
-def parse_args(subparser):
+def parse_args(_):
     """
     Adds the module-specific subcommand arguments.
     """
-    subparser.add_argument(
-        "alias",
-        type=str,
-        help="short name of the connection to be closed")
+    return
 
 
 def command(args):
@@ -34,13 +31,8 @@ def command(args):
     connections = state.get("connections", {})
 
     if connections.get(alias):
+        del_cookie_jar(alias)
         connections.pop(alias)
-        state["connections"] = connections
-
-        if state.get("current_connection", None) == alias:
-            state.pop("current_connection")
-
         set_state(state)
     else:
         print("No such connection:", alias)
-        sys.exit(1)
