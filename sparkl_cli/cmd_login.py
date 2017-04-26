@@ -11,7 +11,10 @@ import getpass
 from sparkl_cli.common import (
     sync_request)
 
-DESCRIPTION = "Logs in, or registers, the specified user with password."
+DESCRIPTION = """\
+    Logs in, or registers, the specified user with password.
+    If no user is given, returns the current login information.
+    """
 
 
 def parse_args(subparser):

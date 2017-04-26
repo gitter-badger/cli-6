@@ -75,7 +75,8 @@ def parse_args():
     for (cmd, submodule) in MODULES:
         subparser = subparsers.add_parser(
             cmd,
-            description=submodule.DESCRIPTION)
+            description=submodule.DESCRIPTION,
+            epilog="(Choose connection with toplevel option -a/--alias)")
         subparser.set_defaults(
             fun=submodule.command)
         submodule.parse_args(subparser)

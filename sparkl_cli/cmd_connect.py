@@ -11,7 +11,10 @@ from sparkl_cli.common import (
     set_state,
     sync_request)
 
-DESCRIPTION = "Opens a connection to the specified url"
+DESCRIPTION = """\
+    Opens a connection to the specified url.
+    If no url is provided, lists existing connections.
+    """
 
 
 def parse_args(subparser):
