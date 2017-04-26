@@ -25,14 +25,16 @@ from . import (
     cmd_close,
     cmd_session,
     cmd_login,
-    cmd_logout)
+    cmd_logout,
+    cmd_list)
 
 MODULES = (
     ("connect", cmd_connect),
     ("close", cmd_close),
     ("session", cmd_session),
     ("login", cmd_login),
-    ("logout", cmd_logout))
+    ("logout", cmd_logout),
+    ("list", cmd_list))
 
 
 def parse_args():

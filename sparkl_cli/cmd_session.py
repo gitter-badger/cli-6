@@ -13,7 +13,7 @@ from sparkl_cli.common import (
     get_state,
     get_working_dir)
 
-DESCRIPTION = "Shows session state"
+DESCRIPTION = "Shows local client state directory and JSON"
 
 
 def parse_args(_):
