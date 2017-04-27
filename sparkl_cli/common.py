@@ -176,17 +176,17 @@ def sync_request(
     Returns a response object, or None if an HTTP request
     exception occurred.
     """
-    connection = get_connection(alias)
-    session = requests.Session()
-    session.cookies = unpickle_cookies(alias)
-
-    base = connection.get("url")
-    request_url = urlparse.urljoin(base, href)
-    if not headers:
-        headers = {}
-    headers["Accept"] = "application/" + accept
-
     try:
+        connection = get_connection(alias)
+        session = requests.Session()
+        session.cookies = unpickle_cookies(alias)
+
+        base = connection.get("url")
+        request_url = urlparse.urljoin(base, href)
+        if not headers:
+            headers = {}
+        headers["Accept"] = "application/" + accept
+
         if method.upper() == "GET":
             response = session.get(
                 request_url,
@@ -208,9 +208,11 @@ def sync_request(
 
         return None
 
-    except BaseException as exception:
-        print(exception)
-        return None
+    except KeyError:
+        print("No alias", alias)
+
+    except Exception:
+        print("Request raised exception")
 
 
 def show_struct(json_object, indent=0):

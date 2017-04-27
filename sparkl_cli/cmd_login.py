@@ -50,8 +50,6 @@ def show_login(args):
         attrs = response.json()["attr"]
         for key in attrs:
             print(key, attrs[key])
-    else:
-        print("Connection error on", args.alias)
 
 
 def login(args):
