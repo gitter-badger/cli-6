@@ -173,8 +173,9 @@ def sync_request(
     Params is a dict, or None.
     Body is a string, or None, used in POST request only.
 
-    Returns a response object, or None if an HTTP request
-    exception occurred.
+    Returns the response object or None.
+    Note that an HTTP status code other than 2xx is false-y
+    in Python.
     """
     try:
         connection = get_connection(alias)
@@ -193,29 +194,24 @@ def sync_request(
                 headers=headers,
                 params=params,
                 timeout=timeout)
-            pickle_cookies(alias, session.cookies)
-            return response
 
-        if method.upper() == "POST":
+        elif method.upper() == "POST":
             response = session.post(
                 request_url,
                 headers=headers,
                 params=params,
                 data=data,
                 timeout=timeout)
-            pickle_cookies(alias, session.cookies)
-            return response
 
-        if method.upper() == "DELETE":
+        elif method.upper() == "DELETE":
             response = session.delete(
                 request_url,
                 headers=headers,
                 params=params,
                 timeout=timeout)
-            pickle_cookies(alias, session.cookies)
-            return response
 
-        return None
+        pickle_cookies(alias, session.cookies)
+        return response
 
     except KeyError:
         print("No alias", alias)

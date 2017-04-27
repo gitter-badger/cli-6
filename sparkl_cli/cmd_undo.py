@@ -36,12 +36,7 @@ def command(args):
     response = sync_request(
         args.alias, "DELETE", "sse_cfg/change")
 
-    if not response:
-        print("Error attempting undo")
-
-    tag = response.json()["tag"]
-
-    if tag == "undo":
+    if response:
         parent = response.json()["attr"]["parent"]
         print("Undone change in", parent)
     else:
