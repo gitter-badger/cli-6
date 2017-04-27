@@ -33,7 +33,8 @@ from . import (
     cmd_put,
     cmd_rm,
     cmd_show,
-    cmd_mkdir)
+    cmd_mkdir,
+    cmd_undo)
 
 MODULES = (
     ("connect", cmd_connect),
@@ -46,7 +47,8 @@ MODULES = (
     ("put", cmd_put),
     ("rm", cmd_rm),
     ("show", cmd_show),
-    ("mkdir", cmd_mkdir))
+    ("mkdir", cmd_mkdir),
+    ("undo", cmd_undo))
 
 
 def get_version():

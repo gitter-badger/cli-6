@@ -206,6 +206,15 @@ def sync_request(
             pickle_cookies(alias, session.cookies)
             return response
 
+        if method.upper() == "DELETE":
+            response = session.delete(
+                request_url,
+                headers=headers,
+                params=params,
+                timeout=timeout)
+            pickle_cookies(alias, session.cookies)
+            return response
+
         return None
 
     except KeyError:
