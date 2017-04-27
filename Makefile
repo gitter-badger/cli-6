@@ -4,7 +4,11 @@ VERSION := $(shell git describe --tags --long --abbrev=1)
 PY_VERSION := $(shell git describe --tags --abbrev=0)
 .PHONY: deps
 deps:
-	@echo No deps.
+	@echo "If deps don't install, try doing 'sudo -H make deps'"
+	@pip install pytest
+	@pip install psutil
+	@pip install argparse
+	@pip install requests
 
 # Note the -v displayed version is in the form v0.0.0-n-hash
 .PHONY: compile
@@ -24,7 +28,7 @@ doc:
 
 .PHONY: test
 test:
-	@python -m unittest discover
+	@pytest
 
 # Note the Python version is in form 0.0.0 only, where we rely
 # on setuptools to normalise and remove the leading 'v'.
