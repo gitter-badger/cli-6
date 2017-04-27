@@ -49,7 +49,7 @@ MODULES = (
     ("mkdir", cmd_mkdir))
 
 
-def version():
+def get_version():
     """
     Returns the content of the version.txt compile-time file.
     """
@@ -83,7 +83,7 @@ def parse_args():
     parser.add_argument(
         "-v", "--version",
         action="version",
-        version=version(),
+        version=get_version(),
         help="show version")
 
     parser.add_argument(
@@ -123,10 +123,6 @@ def main():
     dispatches the specified command.
     """
     args = parse_args()
-
-    if args.version:
-        version()
-        return
 
     common.SESSION_PID = args.session
     common.ALIAS = args.alias
