@@ -7,15 +7,23 @@ Setup specification for distutils.
 Please note this file has the version number replaced by
 the make target, and is copied to setup.py.
 """
-from distutils.core import setup
+from setuptools import setup, find_packages
 from subprocess import check_output
 
 setup(
   name="sparkl_cli",
-  description="SPARKL command line utility",
-  url="sparkl.com",
+  description="SPARKL cli utility",
+  url="http://sparkl.com",
   author="Jacoby Thwaites",
   author_email="dev@sparkl.com",
   version={{version}},
   scripts=["sparkl"],
-  packages=["sparkl_cli"])
+  packages=find_packages(),
+  package_data={
+    "sparkl_cli": ["version.txt"]},
+  license="MIT",
+  install_requires=[
+    "argparse",
+    "psutil",
+    "requests"
+  ])

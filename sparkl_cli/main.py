@@ -15,9 +15,11 @@ Client state between invocations is maintained in the filesystem.
 # Uncomment the following two lines for trace debug.
 # import pdb
 # pdb.set_trace()
+from __future__ import print_function
 
 import os
 import argparse
+import pkg_resources
 
 from . import (
     common,
@@ -47,6 +49,18 @@ MODULES = (
     ("mkdir", cmd_mkdir))
 
 
+def version():
+    """
+    Returns the content of the version.txt compile-time file.
+    """
+    filepath = pkg_resources.resource_filename(
+        __package__, "version.txt")
+    version = "Unknown"
+    with open(filepath, "r") as version_file:
+        version = version_file.read().replace("\n", "")
+    return __package__ + " " + version
+
+
 def parse_args():
     """
     Returns the parsed command and command arguments.
@@ -65,6 +79,12 @@ def parse_args():
         prog=prog_name,
         description="SPARKL command line utility.",
         epilog=epilog)
+
+    parser.add_argument(
+        "-v", "--version",
+        action="version",
+        version=version(),
+        help="show version")
 
     parser.add_argument(
         "-a", "--alias",
@@ -94,15 +114,24 @@ def parse_args():
 
 def main():
     """
-    Main function performs a garbage collection of temp directories.
+    Main function parses arguments.
 
-    It sets the common.GLOBAL values, and then dispatches according
-    to the command.
+    If the --version arg is specified, shows version and returns.
+
+    Otherwise, it sets the common.GLOBAL values, performs a
+    garbage collection to clean outdated sessions, and finally
+    dispatches the specified command.
     """
-    common.garbage_collect()
     args = parse_args()
+
+    if args.version:
+        version()
+        return
+
     common.SESSION_PID = args.session
     common.ALIAS = args.alias
+
+    common.garbage_collect()
     args.fun(args)
 
 # Allow invocation using `python -m sparkl_cli.main`

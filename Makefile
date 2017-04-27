@@ -1,5 +1,6 @@
 # Copyright (c) 2017 SPARKL Limited. All Rights Reserved.
 # Author <jacoby@sparkl.com> Jacoby Thwaites
+VERSION := $(shell git describe --tags --long --abbrev=1)
 .PHONY: deps
 deps:
 	@echo No deps.
@@ -9,6 +10,7 @@ compile:
 	@pep8 sparkl_cli
 	@pylint --ignore=test sparkl_cli
 	@python -m compileall sparkl_cli
+	@echo ${VERSION} > sparkl_cli/version.txt
 
 .PHONY: clean
 clean:
@@ -24,7 +26,7 @@ test:
 
 .PHONY: rel
 rel: clean compile
-	@sed s/{{version}}/\"`git describe --always`\"/ setup.py.src > setup.py
+	@sed s/{{version}}/\"${VERSION}\"/ setup.py.src > setup.py
 	@pandoc -o README.txt README.md
 	@python setup.py sdist
 

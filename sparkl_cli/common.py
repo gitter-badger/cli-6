@@ -211,7 +211,7 @@ def sync_request(
     except KeyError:
         print("No alias", alias)
 
-    except Exception:
+    except BaseException:
         print("Request raised exception")
 
 
