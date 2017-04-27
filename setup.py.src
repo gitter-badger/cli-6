@@ -8,7 +8,6 @@ Please note this file has the version number replaced by
 the make target, and is copied to setup.py.
 """
 from setuptools import setup, find_packages
-from subprocess import check_output
 
 setup(
   name="sparkl_cli",

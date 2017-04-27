@@ -10,7 +10,7 @@ import os
 from .. import common
 
 
-class CommonTests(unittest.TestCase):
+class Tests():
     """
     Basic tests of the common module.
     """
@@ -22,14 +22,12 @@ class CommonTests(unittest.TestCase):
 
     def test_get_working_root(self):
         result = common.get_working_root()
-        self.assert_(
-            os.path.exists(result))
+        assert os.path.exists(result)
 
     def test_get_working_dir(self):
         common.SESSION_PID = 1000
         result = common.get_working_dir()
-        self.assert_(
-            os.path.exists(result))
+        assert os.path.exists(result)
 
     def test_garbage_collect_1(self):
         """
@@ -37,11 +35,9 @@ class CommonTests(unittest.TestCase):
         """
         common.SESSION_PID = 123456
         working_dir = common.get_working_dir()
-        self.assert_(
-            os.path.exists(working_dir))
+        assert os.path.exists(working_dir)
         common.garbage_collect()
-        self.assert_(
-            not os.path.exists(working_dir))
+        assert not os.path.exists(working_dir)
 
     def test_garbage_collect_2(self):
         """
@@ -49,18 +45,14 @@ class CommonTests(unittest.TestCase):
         """
         common.SESSION_PID = os.getppid()
         working_dir = common.get_working_dir()
-        self.assert_(
-            os.path.exists(working_dir))
+        assert os.path.exists(working_dir)
         common.garbage_collect()
-        self.assert_(
-            os.path.exists(working_dir))
+        assert os.path.exists(working_dir)
 
     def test_get_state(self):
         common.SESSION_PID = 1000
         state = common.get_state()
-        self.assertEqual(
-            {},
-            state)
+        assert {} == state
 
     def test_set_state(self):
         common.SESSION_PID = os.getppid()
@@ -70,6 +62,4 @@ class CommonTests(unittest.TestCase):
                     "url": "some url"}}}
         common.set_state(state)
         result = common.get_state()
-        self.assertEqual(
-            state,
-            result)
+        assert state == result
