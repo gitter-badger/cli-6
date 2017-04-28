@@ -91,6 +91,10 @@ def command(args):
     is executed.
     """
     operation = get_object(args.alias, args.operation)
+    if not operation:
+        print("No operation", args.operation)
+        return
+
     vars_dict = get_vars()
     data = []
     can_dispatch = True
@@ -123,9 +127,9 @@ def command(args):
 
     response = sync_request(
         args.alias, "POST", "sse_svc_dispatcher/" + tag,
-        headers = {
+        headers={
             "Content-Type": "application/json"},
-        data = data_event)
+        data=data_event)
 
     if not response:
         print("Error dispatching")
