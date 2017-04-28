@@ -10,6 +10,8 @@ the latter refers to a file containing the value.
 """
 from __future__ import print_function
 
+import os
+
 from sparkl_cli.common import (
     get_state,
     set_state)
@@ -68,9 +70,15 @@ def show_vars(vars_dict):
                     Name=name,
                     Value=value))
             elif method == "read":
-                print("{Name}\t<{Value}>".format(
+                if os.path.isfile(value):
+                    check = "file"
+                else:
+                    check = "nofile"
+
+                print("{Name}\t<{Check} {Value}>".format(
                     Name=name,
-                    Value=value))
+                    Value=value,
+                    Check=check))
     else:
         print("No vars")
 
@@ -78,8 +86,12 @@ def show_vars(vars_dict):
 def command(args):
     """
     Optionally clears all existing vars, then sets one or more vars
-    ready to be used in subsequent operation calls. Var values can
-    be supplied as literals, or read from files.
+    ready to be used in subsequent operation calls.
+
+    Values can be literal, or read from a file.
+
+    With no arguments, lists existing vars. The 'nofile' token
+    indicates a file does not exist.
 
     If no arguments are supplied, shows current var values.
     """
