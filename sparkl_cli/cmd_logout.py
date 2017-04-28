@@ -9,8 +9,6 @@ from __future__ import print_function
 from sparkl_cli.common import (
     sync_request)
 
-DESCRIPTION = "Logs out current user"
-
 
 def parse_args(_):
     """

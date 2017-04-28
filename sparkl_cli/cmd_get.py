@@ -12,8 +12,6 @@ import json
 from sparkl_cli.common import (
     sync_request)
 
-DESCRIPTION = "Gets the (deep) source of the specified object"
-
 
 def parse_args(subparser):
     """

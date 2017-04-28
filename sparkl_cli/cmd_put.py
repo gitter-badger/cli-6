@@ -9,8 +9,6 @@ from __future__ import print_function
 from sparkl_cli.common import (
     sync_request)
 
-DESCRIPTION = "Uploads SPARKL source or other valid XML change file"
-
 
 def parse_args(subparser):
     """
@@ -29,7 +27,7 @@ def parse_args(subparser):
 
 def command(args):
     """
-    Uploads the file to the folder as specified in args.
+    Uploads SPARKL source or other valid XML change file.
     """
     with open(args.file, "rb") as upload_file:
         response = sync_request(

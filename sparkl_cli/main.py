@@ -34,21 +34,25 @@ from . import (
     cmd_rm,
     cmd_show,
     cmd_mkdir,
-    cmd_undo)
+    cmd_undo,
+    cmd_vars,
+    cmd_call)
 
 MODULES = (
-    ("connect", cmd_connect),
-    ("close", cmd_close),
-    ("session", cmd_session),
-    ("login", cmd_login),
-    ("logout", cmd_logout),
-    ("ls", cmd_ls),
-    ("get", cmd_get),
-    ("put", cmd_put),
-    ("rm", cmd_rm),
-    ("show", cmd_show),
-    ("mkdir", cmd_mkdir),
-    ("undo", cmd_undo))
+    ("connect", cmd_connect, "Create or show connections"),
+    ("close", cmd_close, "Close connection"),
+    ("session", cmd_session, "Show all session info"),
+    ("login", cmd_login, "Login user or show current login"),
+    ("logout", cmd_logout, "Logout user"),
+    ("ls", cmd_ls, "List content of folder or service"),
+    ("get", cmd_get, "Download XML or JSON source"),
+    ("put", cmd_put, "Upload XML source or change file"),
+    ("rm", cmd_rm, "Remove object"),
+    ("show", cmd_show, "Show object"),
+    ("mkdir", cmd_mkdir, "Create new folder"),
+    ("undo", cmd_undo, "Undo last change"),
+    ("vars", cmd_vars, "Set field variables"),
+    ("call", cmd_call, "Invoke transaction or operation"))
 
 
 def get_version():
@@ -80,13 +84,8 @@ def parse_args():
     parser = argparse.ArgumentParser(
         prog=prog_name,
         description="SPARKL command line utility.",
-        epilog=epilog)
-
-    parser.add_argument(
-        "-v", "--version",
-        action="version",
-        version=get_version(),
-        help="show version")
+        epilog=epilog,
+        version=get_version())
 
     parser.add_argument(
         "-a", "--alias",
@@ -102,10 +101,11 @@ def parse_args():
 
     subparsers = parser.add_subparsers()
 
-    for (cmd, submodule) in MODULES:
+    for (cmd, submodule, help_text) in MODULES:
         subparser = subparsers.add_parser(
             cmd,
-            description=submodule.DESCRIPTION,
+            description=submodule.command.__doc__,
+            help=help_text,
             epilog="(Choose connection with toplevel option -a/--alias)")
         subparser.set_defaults(
             fun=submodule.command)

@@ -11,8 +11,6 @@ from sparkl_cli.common import (
     set_state,
     delete_cookies)
 
-DESCRIPTION = "Closes the named connection"
-
 
 def parse_args(_):
     """

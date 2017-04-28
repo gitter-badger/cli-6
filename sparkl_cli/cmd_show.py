@@ -10,8 +10,6 @@ from sparkl_cli.common import (
     sync_request,
     show_struct)
 
-DESCRIPTION = "Shows detail about the specified object"
-
 
 def parse_args(subparser):
     """
@@ -25,7 +23,7 @@ def parse_args(subparser):
 
 def command(args):
     """
-    Shows the object specified in the args.
+    Shows detail about the specified object.
     """
     response = sync_request(
         args.alias, "GET", "sse_cfg/object/" + args.object)

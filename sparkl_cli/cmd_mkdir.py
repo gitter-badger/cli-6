@@ -12,8 +12,6 @@ from __future__ import print_function
 from sparkl_cli.common import (
     sync_request)
 
-DESCRIPTION = "Creates a new subfolder in the specified folder"
-
 
 def parse_args(subparser):
     """
@@ -32,8 +30,7 @@ def parse_args(subparser):
 
 def command(args):
     """
-    Creates and uploads a change file to the parent, creating
-    the new folder.
+    Creates a new subfolder in the specified parent folder.
     """
     change = "<change><folder name=\"{Name}\"/></change>".format(
         Name=args.name)

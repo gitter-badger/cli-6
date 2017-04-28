@@ -14,8 +14,6 @@ import os
 from sparkl_cli.common import (
     sync_request)
 
-DESCRIPTION = "Deletes the specified configuration object"
-
 
 def parse_args(subparser):
     """
@@ -29,7 +27,7 @@ def parse_args(subparser):
 
 def command(args):
     """
-    Uploads a delete change file to the object parent.
+    Deletes the specified configuration object.
     """
     folder = os.path.dirname(args.object)
     name = os.path.basename(args.object)
