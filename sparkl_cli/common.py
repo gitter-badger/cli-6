@@ -23,6 +23,35 @@ SESSION_PID = None
 ALIAS = None
 
 
+def get_object(alias, object_id):
+    """
+    Returns the object with the given pathname or id.
+    Maintains a cache of object keyed by id (*not* name).
+    Thus if this function is called with an id, the returned
+    object may come directly from cache.
+    """
+    connection = get_connection(alias)
+    connection_cache = connection.get("cache", {})
+    sparkl_object = connection_cache.get(object_id, None)
+    if sparkl_object:
+        return sparkl_object
+
+    response = sync_request(
+        alias, "GET", "sse_cfg/object/" + object_id)
+
+    if response:
+        sparkl_object = response.json()
+        object_id = sparkl_object["attr"].get("id")
+        if object_id:
+            connection_cache[object_id] = sparkl_object
+            connection["cache"] = connection_cache
+            put_connection(alias, connection)
+
+        return sparkl_object
+
+    return None
+
+
 def get_working_root():
     """
     Returns the working root under which a working directory

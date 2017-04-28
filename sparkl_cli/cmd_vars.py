@@ -64,21 +64,20 @@ def show_vars(vars_dict):
     Shows the var, value items in the state.
     """
     if vars_dict:
-        for (name, [method, value]) in vars_dict.items():
+        for name in sorted(vars_dict.iterkeys()):
+            [method, value] = vars_dict[name]
             if method == "literal":
-                print("{Name}\t\"{Value}\"".format(
+                print("literal\t{Name}=\"{Value}\"".format(
                     Name=name,
                     Value=value))
-            elif method == "read":
-                if os.path.isfile(value):
-                    check = "file"
-                else:
-                    check = "nofile"
-
-                print("{Name}\t<{Check} {Value}>".format(
+            elif method == "read" and os.path.isfile(value):
+                print("file\t{Name}=<{Value}>".format(
                     Name=name,
-                    Value=value,
-                    Check=check))
+                    Value=value))
+            elif method == "read" and not os.path.isfile(value):
+                print("nofile\t{Name}=<{Value}>".format(
+                    Name=name,
+                    Value=value))
     else:
         print("No vars")
 

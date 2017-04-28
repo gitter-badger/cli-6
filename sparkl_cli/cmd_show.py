@@ -7,7 +7,7 @@ Show object command implementation.
 from __future__ import print_function
 
 from sparkl_cli.common import (
-    sync_request,
+    get_object,
     show_struct)
 
 
@@ -25,10 +25,8 @@ def command(args):
     """
     Shows detail about the specified object.
     """
-    response = sync_request(
-        args.alias, "GET", "sse_cfg/object/" + args.object)
-
-    if response:
-        show_struct(response.json())
+    sparkl_object = get_object(args.alias, args.object)
+    if sparkl_object:
+        show_struct(sparkl_object)
     else:
         print("Cannot show", args.object)
