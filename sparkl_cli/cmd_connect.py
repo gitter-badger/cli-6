@@ -9,7 +9,8 @@ from __future__ import print_function
 from sparkl_cli.common import (
     get_state,
     set_state,
-    sync_request)
+    sync_request,
+    show_struct)
 
 
 def parse_args(subparser):
@@ -66,10 +67,8 @@ def new_connection(args):
         args.alias, "GET", "sse/ping")
 
     if response:
-        print("alias", args.alias)
-        attrs = response.json()["attr"]
-        for key in attrs:
-            print(key, attrs[key])
+        show_struct(response.json())
+
     else:
         connections.pop(args.alias, None)
         set_state(state)
