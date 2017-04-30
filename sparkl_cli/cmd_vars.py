@@ -16,6 +16,8 @@ from sparkl_cli.common import (
     get_state,
     set_state)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -82,7 +84,7 @@ def show_vars(vars_dict):
         print("No vars")
 
 
-def command(args):
+def command():
     """
     Optionally clears all existing vars, then sets one or more vars
     ready to be used in subsequent operation calls.
@@ -94,6 +96,7 @@ def command(args):
 
     If no arguments are supplied, shows current var values.
     """
+    args = common.ARGS
     vars_dict = get_vars()
 
     if not (args.clear or args.literal or args.read):

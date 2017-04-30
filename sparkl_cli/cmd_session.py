@@ -21,7 +21,7 @@ def parse_args(_):
     return
 
 
-def command(_):
+def command():
     """
     Shows local client state including working directory.
     """

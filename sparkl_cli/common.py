@@ -18,9 +18,8 @@ import psutil
 STATE_FILE = "state.json"
 DEFAULT_TIMEOUT = 3
 
-# Set by main module.
-SESSION_PID = None
-ALIAS = None
+# Set by main module
+ARGS = {}
 
 
 def get_object(alias, object_id):
@@ -76,10 +75,9 @@ def get_working_dir():
 
     The directory is created if necessary.
     """
-
     working_dir = os.path.join(
         get_working_root(),
-        str(SESSION_PID))
+        str(ARGS.session))
 
     if not os.path.exists(working_dir):
         os.makedirs(working_dir)

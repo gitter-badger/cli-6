@@ -9,6 +9,8 @@ from __future__ import print_function
 from sparkl_cli.common import (
     sync_request)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -25,10 +27,11 @@ def parse_args(subparser):
         help="folder id or path, into which the change is placed")
 
 
-def command(args):
+def command():
     """
     Uploads SPARKL source or other valid XML change file.
     """
+    args = common.ARGS
     with open(args.file, "rb") as upload_file:
         response = sync_request(
             args.alias, "POST", "sse_cfg/change/" + args.folder,

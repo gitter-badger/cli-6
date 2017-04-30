@@ -12,6 +12,8 @@ from __future__ import print_function
 from sparkl_cli.common import (
     sync_request)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -28,10 +30,11 @@ def parse_args(subparser):
         help="new folder name")
 
 
-def command(args):
+def command():
     """
     Creates a new subfolder in the specified parent folder.
     """
+    args = common.ARGS
     change = "<change><folder name=\"{Name}\"/></change>".format(
         Name=args.name)
 

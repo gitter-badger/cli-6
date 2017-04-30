@@ -9,6 +9,8 @@ from __future__ import print_function
 from sparkl_cli.common import (
     sync_request)
 
+from . import common
+
 
 def parse_args(_):
     """
@@ -17,10 +19,11 @@ def parse_args(_):
     return
 
 
-def logout(args):
+def logout():
     """
     Logs out the user, if already logged in.
     """
+    args = common.ARGS
     response = sync_request(
         args.alias, "POST", "sse_cfg/signout")
 
@@ -28,8 +31,8 @@ def logout(args):
         print("Logout failed")
 
 
-def command(args):
+def command():
     """
     Logs out the currently logged-in user, if any.
     """
-    logout(args)
+    logout()

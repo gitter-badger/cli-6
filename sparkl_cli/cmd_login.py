@@ -11,6 +11,8 @@ import getpass
 from sparkl_cli.common import (
     sync_request)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -32,11 +34,12 @@ def parse_args(subparser):
         help="password of user. Omit to be prompted.")
 
 
-def show_login(args):
+def show_login():
     """
     Shows the logged in user on the connection specified in
     the args, or default.
     """
+    args = common.ARGS
     response = sync_request(
         args.alias, "GET", "sse_cfg/user")
 
@@ -47,11 +50,12 @@ def show_login(args):
             print(key, attrs[key])
 
 
-def login(args):
+def login():
     """
     Logs in the specified user, prompting for password
     if necessary.
     """
+    args = common.ARGS
     if not args.password:
         args.password = getpass.getpass("Password: ")
 
@@ -65,11 +69,12 @@ def login(args):
         print("Login failed")
 
 
-def register(args):
+def register():
     """
     Registers the specified user, prompting twice for
     password if necessary.
     """
+    args = common.ARGS
     if not args.password:
         args.password = getpass.getpass("Password: ")
         check = getpass.getpass("Repeat: ")
@@ -87,14 +92,15 @@ def register(args):
         print("Register user failed")
 
 
-def command(args):
+def command():
     """
     Logs in or registers the user. If no user specified, shows
     the current login status.
     """
+    args = common.ARGS
     if not args.user:
-        show_login(args)
+        show_login()
     elif args.register:
-        register(args)
+        register()
     else:
-        login(args)
+        login()

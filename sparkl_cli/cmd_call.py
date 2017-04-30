@@ -17,11 +17,12 @@ import json
 
 from sparkl_cli.common import (
     get_object,
-    sync_request,
-    show_struct)
+    sync_request)
 
 from sparkl_cli.cmd_vars import (
     get_vars)
+
+from . import common
 
 
 def parse_args(subparser):
@@ -81,25 +82,17 @@ def to_datum(field_id, field_name, field_type, field_value):
     return datum
 
 
-def command(args):
+def vars_to_data(args, operation):
     """
-    Invoked the named operation. Existing vars are used to populate
-    the field values, where needed.
-    In the case of a solicit or notify, this causes a transaction to
-    be executed.
-    In the case of a request or consume, the individual operation
-    is executed.
-    """
-    operation = get_object(args.alias, args.operation)
-    if not operation:
-        print("No operation", args.operation)
-        return
+    Builds the list of datum required by the operation event,
+    built using the current var values.
 
+    Returns a 2-tuple whose first element is True if the data is
+    complete and therefore the event can be dispatched.
+    """
     vars_dict = get_vars()
     data = []
     can_dispatch = True
-    tag = operation["tag"]
-    subject = operation["attr"]["id"]
 
     for field_id in operation["attr"]["fields"].split():
         field = get_object(args.alias, field_id)
@@ -114,8 +107,30 @@ def command(args):
             else:
                 can_dispatch = False
 
+    return (can_dispatch, data)
+
+
+def command():
+    """
+    Invoked the named operation. Existing vars are used to populate
+    the field values, where needed.
+    In the case of a solicit or notify, this causes a transaction to
+    be executed.
+    In the case of a request or consume, the individual operation
+    is executed.
+    """
+    args = common.ARGS
+    operation = get_object(args.alias, args.operation)
+    if not operation:
+        print("No operation", args.operation)
+        return
+
+    tag = operation["tag"]
+    subject = operation["attr"]["id"]
+
+    (can_dispatch, data) = vars_to_data(args, operation)
+
     if not can_dispatch:
-        print("Cannot dispatch", tag)
         return
 
     data_event = json.dumps({
@@ -131,8 +146,17 @@ def command(args):
             "Content-Type": "application/json"},
         data=data_event)
 
-    if not response:
-        print("Error dispatching")
-        return
-
-    show_struct(response.json())
+    if response:
+        response_json = response.json()
+        if response_json["tag"] == "error":
+            print(response_json)
+        else:
+            subject_id = response_json["attr"]["subject"]
+            subject = get_object(args.alias, subject_id)
+            print(subject["tag"], subject["attr"]["name"])
+            for datum in response_json.get("content", []):
+                content = datum.get("content", None)
+                if content:
+                    field_id = datum["attr"]["field"]
+                    field = get_object(args.alias, field_id)
+                    print("field", field_id, field["attr"]["name"], content)

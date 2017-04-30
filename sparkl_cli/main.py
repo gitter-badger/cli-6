@@ -125,12 +125,10 @@ def main():
     dispatches the specified command.
     """
     args = parse_args()
-
-    common.SESSION_PID = args.session
-    common.ALIAS = args.alias
+    common.ARGS = args
 
     common.garbage_collect()
-    args.fun(args)
+    args.fun()
 
 # Allow invocation using `python -m sparkl_cli.main`
 if __name__ == "__main__":

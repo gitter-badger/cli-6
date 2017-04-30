@@ -12,6 +12,8 @@ from sparkl_cli.common import (
     sync_request,
     show_struct)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -41,7 +43,7 @@ def show_connections():
         print("No connections")
 
 
-def new_connection(args):
+def new_connection():
     """
     Opens a new connection with the specified alias to the host url,
     unless there is already a connection with that alias.
@@ -50,6 +52,7 @@ def new_connection(args):
     Prints an error if the connection cannot be opened. This will cause
     there to be no current connection.
     """
+    args = common.ARGS
     state = get_state()
     connections = state.get("connections", {})
 
@@ -75,12 +78,13 @@ def new_connection(args):
         print("No SPARKL at", args.url)
 
 
-def command(args):
+def command():
     """
     Opens a new connection if url is specified, otherwise shows
     existing connections if any.
     """
+    args = common.ARGS
     if args.url:
-        new_connection(args)
+        new_connection()
     else:
         show_connections()

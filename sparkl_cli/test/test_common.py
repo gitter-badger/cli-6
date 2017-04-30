@@ -10,14 +10,18 @@ import os
 from .. import common
 
 
+class Mock():
+    pass
+
+
 class Tests():
     """
     Basic tests of the common module.
     """
-    def setUp(self):
-        pass
+    def setup_method(self):
+        common.ARGS = Mock()
 
-    def tearDown(self):
+    def teardown_method(self):
         pass
 
     def test_get_working_root(self):
@@ -25,7 +29,8 @@ class Tests():
         assert os.path.exists(result)
 
     def test_get_working_dir(self):
-        common.SESSION_PID = 1000
+        common.ARGS.session = "1000"
+        print common.ARGS
         result = common.get_working_dir()
         assert os.path.exists(result)
 
@@ -33,7 +38,7 @@ class Tests():
         """
         Garbage collection should remove non-existent pid.
         """
-        common.SESSION_PID = 123456
+        common.ARGS.session = 123456
         working_dir = common.get_working_dir()
         assert os.path.exists(working_dir)
         common.garbage_collect()
@@ -43,19 +48,19 @@ class Tests():
         """
         Garbage collection should not remove live pid.
         """
-        common.SESSION_PID = os.getppid()
+        common.ARGS.session = os.getppid()
         working_dir = common.get_working_dir()
         assert os.path.exists(working_dir)
         common.garbage_collect()
         assert os.path.exists(working_dir)
 
     def test_get_state(self):
-        common.SESSION_PID = 1000
+        common.ARGS.session = 1000
         state = common.get_state()
         assert {} == state
 
     def test_set_state(self):
-        common.SESSION_PID = os.getppid()
+        common.ARGS.session = os.getppid()
         state = {
             "connections": {
                 "foo": {

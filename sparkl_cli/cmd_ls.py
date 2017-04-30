@@ -9,6 +9,8 @@ from __future__ import print_function
 from sparkl_cli.common import (
     sync_request)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -22,10 +24,11 @@ def parse_args(subparser):
         help="folder id or path")
 
 
-def list_folder(args):
+def list_folder():
     """
     Lists the content of the folder specified in the args.
     """
+    args = common.ARGS
     response = sync_request(
         args.alias, "GET", "sse_cfg/content/" + args.folder)
 
@@ -44,10 +47,10 @@ def list_folder(args):
         print("Cannot list folder", args.folder)
 
 
-def command(args):
+def command():
     """
     Lists the contents of the specified folder. Each line
     shows the type, id and name of a folder entry; or the
     type and id of a service instance.
     """
-    list_folder(args)
+    list_folder()

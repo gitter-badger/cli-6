@@ -12,6 +12,8 @@ import json
 from sparkl_cli.common import (
     sync_request)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -40,11 +42,12 @@ def parse_args(subparser):
         help="pretty print output")
 
 
-def prettify(args, output):
+def prettify(output):
     """
     Returns the pretty-print version of the output,
     either XML or JSON according to the args.
     """
+    args = common.ARGS
     if args.format.lower() == "xml":
         parsed = xml.dom.minidom.parseString(output)
         pretty = parsed.toprettyxml()
@@ -57,18 +60,21 @@ def prettify(args, output):
     return pretty
 
 
-def save(filename, output):
+def save(output):
     """
     Saves the output text to the specified file.
     """
+    filename = common.ARGS.file
     with open(filename, "w") as output_file:
         output_file.write(output)
 
 
-def command(args):
+def command():
     """
     Lists the contents of the specified folder.
     """
+    args = common.ARGS
+
     response = sync_request(
         args.alias, "GET", "sse_cfg/source/" + args.object,
         accept=args.format)
@@ -76,10 +82,10 @@ def command(args):
     if response:
         output = response.text
         if args.pretty:
-            output = prettify(args, output)
+            output = prettify(output)
 
         if args.file:
-            save(args.file, output)
+            save(output)
         else:
             print(output)
     else:

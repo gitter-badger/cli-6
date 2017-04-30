@@ -10,6 +10,8 @@ from sparkl_cli.common import (
     get_object,
     show_struct)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -21,10 +23,11 @@ def parse_args(subparser):
         help="object id or path")
 
 
-def command(args):
+def command():
     """
     Shows detail about the specified object.
     """
+    args = common.ARGS
     sparkl_object = get_object(args.alias, args.object)
     if sparkl_object:
         show_struct(sparkl_object)

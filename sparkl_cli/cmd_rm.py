@@ -14,6 +14,8 @@ import os
 from sparkl_cli.common import (
     sync_request)
 
+from . import common
+
 
 def parse_args(subparser):
     """
@@ -25,10 +27,11 @@ def parse_args(subparser):
         help="object id or path")
 
 
-def command(args):
+def command():
     """
     Deletes the specified configuration object.
     """
+    args = common.ARGS
     folder = os.path.dirname(args.object)
     name = os.path.basename(args.object)
 

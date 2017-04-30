@@ -11,6 +11,8 @@ from sparkl_cli.common import (
     set_state,
     delete_cookies)
 
+from . import common
+
 
 def parse_args(_):
     """
@@ -19,18 +21,18 @@ def parse_args(_):
     return
 
 
-def command(args):
+def command():
     """
     Closes the connection with the given alias, if already open.
     """
-    alias = args.alias
+    args = common.ARGS
 
     state = get_state()
     connections = state.get("connections", {})
 
-    if connections.get(alias):
-        delete_cookies(alias)
-        connections.pop(alias)
+    if connections.get(args.alias):
+        delete_cookies(args.alias)
+        connections.pop(args.alias)
         set_state(state)
     else:
-        print("No such connection:", alias)
+        print("No such connection:", args.alias)
