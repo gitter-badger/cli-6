@@ -5,6 +5,9 @@ PY_VERSION := $(shell git describe --tags --abbrev=0)
 .PHONY: deps
 deps:
 	@echo "If deps don't install, try doing 'sudo -H make deps'"
+	@pip install pandoc
+	@pip install pep8
+	@pip install pylint
 	@pip install pytest
 	@pip install psutil
 	@pip install argparse
