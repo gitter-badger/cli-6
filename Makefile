@@ -25,7 +25,7 @@ compile:
 
 .PHONY: clean
 clean:
-	@find . -name "*.pyc" | xargs rm
+	@find . -name "*.pyc" -exec rm {} \;
 
 .PHONY: doc
 doc:
