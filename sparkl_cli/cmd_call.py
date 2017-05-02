@@ -15,6 +15,9 @@ from __future__ import print_function
 import os
 import json
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     get_object,
     sync_request)
@@ -122,8 +125,9 @@ def command():
     args = common.ARGS
     operation = get_object(args.alias, args.operation)
     if not operation:
-        print("No operation", args.operation)
-        return
+        raise CliException(
+            "No operation {Operation}".format(
+                Operation=args.operation))
 
     tag = operation["tag"]
     subject = operation["attr"]["id"]
@@ -131,7 +135,9 @@ def command():
     (can_dispatch, data) = vars_to_data(args, operation)
 
     if not can_dispatch:
-        return
+        raise CliException(
+            "Cannot dispatch {Operation}".format(
+                Operation=args.operation))
 
     data_event = json.dumps({
         "tag": "data_event",
@@ -146,17 +152,24 @@ def command():
             "Content-Type": "application/json"},
         data=data_event)
 
-    if response:
-        response_json = response.json()
-        if response_json["tag"] == "error":
-            print(response_json)
-        else:
-            subject_id = response_json["attr"]["subject"]
-            subject = get_object(args.alias, subject_id)
-            print(subject["tag"], subject["attr"]["name"])
-            for datum in response_json.get("content", []):
-                content = datum.get("content", None)
-                if content:
-                    field_id = datum["attr"]["field"]
-                    field = get_object(args.alias, field_id)
-                    print("field", field_id, field["attr"]["name"], content)
+    if not response:
+        raise CliException(
+            "Failed call to {Operation}".format(
+                Operation=args.operation))
+
+    response_json = response.json()
+    if response_json["tag"] == "error":
+        reason = response_json["attr"]["reason"]
+        raise CliException(
+            "Error return with reason {Reason}".format(
+                Reason=reason))
+
+    subject_id = response_json["attr"]["subject"]
+    subject = get_object(args.alias, subject_id)
+    print(subject["tag"], subject["attr"]["name"])
+    for datum in response_json.get("content", []):
+        content = datum.get("content", None)
+        if content:
+            field_id = datum["attr"]["field"]
+            field = get_object(args.alias, field_id)
+            print("field", field_id, field["attr"]["name"], content)
