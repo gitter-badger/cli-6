@@ -18,7 +18,7 @@ import psutil
 STATE_FILE = "state.json"
 DEFAULT_TIMEOUT = 3
 
-# Set by main module
+# Global set by main module and imported by all modules.
 ARGS = {}
 
 
@@ -240,11 +240,8 @@ def sync_request(
         pickle_cookies(alias, session.cookies)
         return response
 
-    except KeyError:
-        print("No alias", alias)
-
     except BaseException:
-        print("Request raised exception")
+        return None
 
 
 def show_struct(json_object, indent=0):

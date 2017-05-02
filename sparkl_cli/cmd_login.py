@@ -8,6 +8,9 @@ from __future__ import print_function
 
 import getpass
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     sync_request)
 
@@ -66,7 +69,9 @@ def login():
             "password": args.password})
 
     if not response:
-        print("Login failed")
+        raise CliException(
+            "Failed to login {User}".format(
+                User=args.user))
 
 
 def register():
@@ -79,8 +84,8 @@ def register():
         args.password = getpass.getpass("Password: ")
         check = getpass.getpass("Repeat: ")
         if args.password != check:
-            print("Passwords do not match")
-            return
+            raise CliException(
+                "Passwords do not match")
 
     response = sync_request(
         args.alias, "POST", "sse_cfg/register",
@@ -89,7 +94,9 @@ def register():
             "password": args.password})
 
     if not response:
-        print("Register user failed")
+        raise CliException(
+            "Failed to register {User}".format(
+                User=args.user))
 
 
 def command():

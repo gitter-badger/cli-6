@@ -9,6 +9,9 @@ the undo was successful.
 """
 from __future__ import print_function
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     sync_request)
 
@@ -36,4 +39,5 @@ def command():
         parent = response.json()["attr"]["parent"]
         print("Undone change in", parent)
     else:
-        print("Cannot undo")
+        raise CliException(
+            "Undo stack empty - cannot undo")

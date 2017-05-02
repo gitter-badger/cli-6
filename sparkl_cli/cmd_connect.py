@@ -6,6 +6,9 @@ Open command implementation.
 """
 from __future__ import print_function
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     get_state,
     set_state,
@@ -57,8 +60,9 @@ def new_connection():
     connections = state.get("connections", {})
 
     if args.alias in connections:
-        print(args.alias, "already open")
-        return
+        raise CliException(
+            "Alias {Alias} is already open".format(
+                Alias=args.alias))
 
     connection = {
         "url": args.url}
@@ -75,7 +79,9 @@ def new_connection():
     else:
         connections.pop(args.alias, None)
         set_state(state)
-        print("No SPARKL at", args.url)
+        raise CliException(
+            "No SPARKL at {Url}".format(
+                Url=args.url))
 
 
 def command():

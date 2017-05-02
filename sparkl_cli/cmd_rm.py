@@ -11,6 +11,9 @@ from __future__ import print_function
 
 import os
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     sync_request)
 
@@ -49,4 +52,6 @@ def command():
         data=change)
 
     if not response:
-        print("Error deleting", args.object)
+        raise CliException(
+            "Error deleting {Object}".format(
+                Object=args.object))

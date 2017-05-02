@@ -24,11 +24,8 @@ def logout():
     Logs out the user, if already logged in.
     """
     args = common.ARGS
-    response = sync_request(
+    sync_request(
         args.alias, "POST", "sse_cfg/signout")
-
-    if not response:
-        print("Logout failed")
 
 
 def command():

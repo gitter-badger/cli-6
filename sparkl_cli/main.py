@@ -18,10 +18,12 @@ Client state between invocations is maintained in the filesystem.
 from __future__ import print_function
 
 import os
+import sys
 import argparse
 import pkg_resources
 
 from . import (
+    cli_exception,
     common,
     cmd_connect,
     cmd_close,
@@ -128,7 +130,15 @@ def main():
     common.ARGS = args
 
     common.garbage_collect()
-    args.fun()
+
+    try:
+        args.fun()
+        sys.exit(0)
+
+    except cli_exception.CliException as exception:
+        print(exception)
+        sys.exit(1)
+
 
 # Allow invocation using `python -m sparkl_cli.main`
 if __name__ == "__main__":

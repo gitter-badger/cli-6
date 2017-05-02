@@ -6,6 +6,9 @@ Show object command implementation.
 """
 from __future__ import print_function
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     get_object,
     show_struct)
@@ -32,4 +35,6 @@ def command():
     if sparkl_object:
         show_struct(sparkl_object)
     else:
-        print("Cannot show", args.object)
+        raise CliException(
+            "Cannot show object {Object}".format(
+                Object=args.object))

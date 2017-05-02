@@ -9,6 +9,9 @@ specified folder.
 """
 from __future__ import print_function
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     sync_request)
 
@@ -46,4 +49,7 @@ def command():
         data=change)
 
     if not response:
-        print("Error creating folder", args.name, "in", args.parent)
+        raise CliException(
+            "Error creating folder {Folder} in {Parent}".format(
+                Folder=args.name,
+                Parent=args.parent))

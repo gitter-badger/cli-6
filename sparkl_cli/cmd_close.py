@@ -6,6 +6,9 @@ Close command implementation.
 """
 from __future__ import print_function
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     get_state,
     set_state,
@@ -35,4 +38,6 @@ def command():
         connections.pop(args.alias)
         set_state(state)
     else:
-        print("No such connection:", args.alias)
+        raise CliException(
+            "No connection alias {Alias}".format(
+                Alias=args.alias))

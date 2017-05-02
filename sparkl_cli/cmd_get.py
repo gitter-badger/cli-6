@@ -9,6 +9,9 @@ from __future__ import print_function
 import xml.dom.minidom
 import json
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     sync_request)
 
@@ -89,4 +92,6 @@ def command():
         else:
             print(output)
     else:
-        print("Cannot get object", args.object)
+        raise CliException(
+            "Cannot get {Object}".format(
+                Object=args.object))

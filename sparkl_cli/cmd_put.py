@@ -6,6 +6,9 @@ Upload source command implementation.
 """
 from __future__ import print_function
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     sync_request)
 
@@ -41,4 +44,7 @@ def command():
             data=upload_file)
 
     if not response:
-        print("Error uploading")
+        raise CliException(
+            "Error uploading {File} to {Folder}".format(
+                File=args.file,
+                Folder=args.folder))

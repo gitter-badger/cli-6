@@ -6,6 +6,9 @@ List command implementation.
 """
 from __future__ import print_function
 
+from sparkl_cli.cli_exception import (
+    CliException)
+
 from sparkl_cli.common import (
     sync_request)
 
@@ -32,19 +35,21 @@ def list_folder():
     response = sync_request(
         args.alias, "GET", "sse_cfg/content/" + args.folder)
 
-    if response:
-        if "content" in response.json():
-            content = response.json()["content"]
-            for entry in content:
-                print(
-                    entry["tag"],
-                    entry["attr"]["id"],
-                    entry["attr"].get("name", ""),
-                    sep="\t")
-        else:
-            print("No content")
+    if not response:
+        raise CliException(
+            "Cannot list content of {Folder}".format(
+                Folder=args.folder))
+
+    if "content" in response.json():
+        content = response.json()["content"]
+        for entry in content:
+            print(
+                entry["tag"],
+                entry["attr"]["id"],
+                entry["attr"].get("name", ""),
+                sep="\t")
     else:
-        print("Cannot list folder", args.folder)
+        print("No content")
 
 
 def command():
