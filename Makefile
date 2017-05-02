@@ -4,20 +4,22 @@ VERSION := $(shell git describe --tags --long --abbrev=1)
 PY_VERSION := $(shell git describe --tags --abbrev=0)
 .PHONY: deps
 deps:
-	@echo "If deps don't install, try doing 'sudo -H make deps'"
-	@pip install pandoc
-	@pip install pep8
-	@pip install pylint
-	@pip install pytest
-	@pip install psutil
-	@pip install argparse
-	@pip install requests
+ifeq  '$(shell which pandoc)'  ''
+	@echo "Missing pandoc, required for 'make rel' target"
+	@echo "Consider '[apt-get|brew] install pandoc'"
+endif
+	@pip install --user -q pep8
+	@pip install --user -q pylint
+	@pip install --user -q pytest
+	@pip install --user -q psutil
+	@pip install --user -q argparse
+	@pip install --user -q requests
 
 # Note the -v displayed version is in the form v0.0.0-n-hash
 .PHONY: compile
 compile:
-	@pep8 sparkl_cli
-	@pylint --ignore=test sparkl_cli
+	@python -m pep8 sparkl_cli
+	@python -m pylint --ignore=test sparkl_cli
 	@python -m compileall sparkl_cli
 	@echo ${VERSION} > sparkl_cli/version.txt
 
@@ -37,6 +39,9 @@ test:
 # on setuptools to normalise and remove the leading 'v'.
 .PHONY: rel
 rel: clean compile
+ifeq  '$(shell which pandoc)'  ''
+	$(error "Missing pandoc. Consider '[apt-get|brew] install pandoc'")
+endif
 	@sed s/{{version}}/\"${PY_VERSION}\"/ setup.py.src > setup.py
 	@pandoc -o README.txt README.md
 	@python setup.py sdist
