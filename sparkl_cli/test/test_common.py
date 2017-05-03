@@ -4,7 +4,6 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 
 Test module for common.py
 """
-import unittest
 import os
 
 from .. import common

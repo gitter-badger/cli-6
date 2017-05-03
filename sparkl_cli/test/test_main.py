@@ -5,9 +5,6 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 Test module connects to https://demo-instance.sparkl.com:9000
 and tests a series of commands.
 """
-import unittest
-import subprocess
-
 from .. import main
 
 
