@@ -4,6 +4,10 @@ VERSION := $(shell git describe --tags --long --abbrev=1)
 PY_VERSION := $(shell git describe --tags --abbrev=0)
 .PHONY: deps
 deps:
+ifeq  '$(shell which pip)'  ''
+	@echo "Missing pip, required for compile target"
+	@echo "Consider '[apt-get|brew] install pip'"
+endif
 ifeq  '$(shell which pandoc)'  ''
 	@echo "Missing pandoc, required for 'make rel' target"
 	@echo "Consider '[apt-get|brew] install pandoc'"
