@@ -33,7 +33,7 @@ doc:
 
 .PHONY: test
 test:
-	@pytest
+	@python -m pytest
 
 # Note the Python version is in form 0.0.0 only, where we rely
 # on setuptools to normalise and remove the leading 'v'.
