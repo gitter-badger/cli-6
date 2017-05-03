@@ -102,7 +102,7 @@ def vars_to_data(args, operation):
         field_type = field["attr"]["type"]
         if field_type:
             field_name = field["attr"]["name"]
-            field_value = vars_dict.get(field_name, None)
+            field_value = vars_dict.get(field_name)
             datum = to_datum(
                 field_id, field_name, field_type, field_value)
             if datum:
@@ -168,7 +168,7 @@ def command():
     subject = get_object(args.alias, subject_id)
     print(subject["tag"], subject["attr"]["name"])
     for datum in response_json.get("content", []):
-        content = datum.get("content", None)
+        content = datum.get("content")
         if content:
             field_id = datum["attr"]["field"]
             field = get_object(args.alias, field_id)

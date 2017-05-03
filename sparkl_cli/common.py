@@ -31,7 +31,7 @@ def get_object(alias, object_id):
     """
     connection = get_connection(alias)
     connection_cache = connection.get("cache", {})
-    sparkl_object = connection_cache.get(object_id, None)
+    sparkl_object = connection_cache.get(object_id)
     if sparkl_object:
         return sparkl_object
 
