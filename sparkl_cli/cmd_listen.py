@@ -30,14 +30,12 @@ def parse_args(subparser):
     subparser.add_argument(
         "-c", "--consume",
         type=str,
-        default="Log",
-        help="Show events from the named consume operation only [Log]")
+        help="Shows only events from a single named consume")
 
     subparser.add_argument(
         "-f", "--field",
         type=str,
-        default="event",
-        help="Show value of the named field only [event]")
+        help="Show only value of a single named field")
 
     subparser.add_argument(
         "service",
@@ -127,7 +125,7 @@ def command():
     provision = service["attr"]["provision"]
     if provision != "rest":
         raise CliException(
-            "Service provision='{Provision}', should be 'rest'".format(
+            "Provision type is '{Provision}'. Should be 'rest'".format(
                 Provision=provision))
 
     cli_ws = get_cli_ws()

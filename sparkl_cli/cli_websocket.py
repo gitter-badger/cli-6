@@ -91,11 +91,13 @@ class CliWebsocket(object):
         """
         User method to open this websocket.
         """
-        print(self.ws_url)
-        self.ws_connection.run_forever()
+        try:
+            self.ws_connection.run_forever()
+        except KeyboardInterrupt:
+            raise CliException("Stopped by user")
 
     def close(self):
         """
         User method to close this websocket.
         """
-        pass
+        self.ws_connection.keep_running = False
