@@ -10,12 +10,11 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     get_state,
     set_state,
     sync_request,
     show_struct)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -55,7 +54,7 @@ def new_connection():
     Prints an error if the connection cannot be opened. This will cause
     there to be no current connection.
     """
-    args = common.ARGS
+    args = get_args()
     state = get_state()
     connections = state.get("connections", {})
 
@@ -89,7 +88,7 @@ def command():
     Opens a new connection if url is specified, otherwise shows
     existing connections if any.
     """
-    args = common.ARGS
+    args = get_args()
     if args.url:
         new_connection()
     else:

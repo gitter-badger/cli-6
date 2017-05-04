@@ -22,9 +22,12 @@ import sys
 import argparse
 import pkg_resources
 
+from sparkl_cli.common import (
+    get_args,
+    garbage_collect)
+
 from . import (
     cli_exception,
-    common,
     cmd_connect,
     cmd_close,
     cmd_session,
@@ -78,7 +81,7 @@ def parse_args():
     This calls out to each submodule to parse the command line
     arguments.
     """
-    prog_name = os.environ.get("SPARKL_PROG_NAME", None)
+    prog_name = os.environ.get("SPARKL_PROG_NAME")
     if not prog_name:
         prog_name = __package__
 
@@ -115,7 +118,8 @@ def parse_args():
             fun=submodule.command)
         submodule.parse_args(subparser)
 
-    return parser.parse_args()
+    return parser.parse_args(
+        namespace=get_args())
 
 
 def main():
@@ -124,14 +128,13 @@ def main():
 
     If the --version arg is specified, shows version and returns.
 
-    Otherwise, it sets the common.GLOBAL values, performs a
-    garbage collection to clean outdated sessions, and finally
-    dispatches the specified command.
+    Otherwise, it parses arguments into the common namespace object,
+    performs a garbage collection to clean outdated sessions,
+    and finally dispatches the specified command.
     """
     args = parse_args()
-    common.ARGS = args
 
-    common.garbage_collect()
+    garbage_collect()
 
     try:
         args.fun()
