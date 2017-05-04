@@ -113,7 +113,8 @@ def parse_args():
             fun=submodule.command)
         submodule.parse_args(subparser)
 
-    return parser.parse_args()
+    return parser.parse_args(
+        namespace=common.get_args())
 
 
 def main():
@@ -127,7 +128,6 @@ def main():
     dispatches the specified command.
     """
     args = parse_args()
-    common.ARGS = args
 
     common.garbage_collect()
 

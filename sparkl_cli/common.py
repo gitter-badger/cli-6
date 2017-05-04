@@ -18,8 +18,23 @@ import psutil
 STATE_FILE = "state.json"
 DEFAULT_TIMEOUT = 3
 
+
+# pylint: disable=too-few-public-methods
+class ArgsMixin(object):
+    """
+    A singleton object of this class has arg attributes on it.
+    """
+    pass
+
 # Global set by main module and imported by all modules.
-ARGS = {}
+ARGS = ArgsMixin()
+
+
+def get_args():
+    """
+    Returns the args mixin object.
+    """
+    return ARGS
 
 
 def get_object(alias, object_id):

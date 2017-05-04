@@ -13,10 +13,9 @@ from __future__ import print_function
 import os
 
 from sparkl_cli.common import (
+    get_args,
     get_state,
     set_state)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -96,7 +95,7 @@ def command():
 
     If no arguments are supplied, shows current var values.
     """
-    args = common.ARGS
+    args = get_args()
     vars_dict = get_vars()
 
     if not (args.clear or args.literal or args.read):

@@ -19,13 +19,12 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     get_object,
     sync_request)
 
 from sparkl_cli.cmd_vars import (
     get_vars)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -122,7 +121,7 @@ def command():
     In the case of a request or consume, the individual operation
     is executed.
     """
-    args = common.ARGS
+    args = get_args()
     operation = get_object(args.alias, args.operation)
     if not operation:
         raise CliException(
