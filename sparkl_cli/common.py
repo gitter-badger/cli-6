@@ -12,8 +12,14 @@ import tempfile
 import json
 import urlparse
 import pickle
-import requests
 import psutil
+import requests
+
+from requests.exceptions import (
+    RequestException)
+
+from sparkl_cli.cli_exception import (
+    CliException)
 
 STATE_FILE = "state.json"
 DEFAULT_TIMEOUT = 3
@@ -150,7 +156,13 @@ def get_connection(alias):
     """
     state = get_state()
     connections = state.get("connections", {})
-    return connections[alias]
+    connection = connections.get(alias)
+    if not connection:
+        raise CliException(
+            "No connection {Alias}".format(
+                Alias=alias))
+
+    return connection
 
 
 def put_connection(alias, connection):
@@ -196,7 +208,8 @@ def delete_cookies(alias):
     """
     cookie_file = os.path.join(
         get_working_dir(), alias + ".cookies")
-    os.remove(cookie_file)
+    if os.path.isfile(cookie_file):
+        os.remove(cookie_file)
 
 
 def sync_request(
@@ -219,8 +232,9 @@ def sync_request(
     Note that an HTTP status code other than 2xx is false-y
     in Python.
     """
+    connection = get_connection(alias)
+
     try:
-        connection = get_connection(alias)
         session = requests.Session()
         session.cookies = unpickle_cookies(alias)
 
@@ -255,7 +269,7 @@ def sync_request(
         pickle_cookies(alias, session.cookies)
         return response
 
-    except BaseException:
+    except RequestException:
         return None
 
 
