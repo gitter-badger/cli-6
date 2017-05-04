@@ -4,6 +4,10 @@ VERSION := $(shell git describe --tags --long --abbrev=1)
 PY_VERSION := $(shell git describe --tags --abbrev=0)
 .PHONY: deps
 deps:
+ifeq  '$(shell which pip)'  ''
+	@echo "Missing pip, required for compile target"
+	@echo "Consider '[apt-get|brew] install python-pip'"
+endif
 ifeq  '$(shell which pandoc)'  ''
 	@echo "Missing pandoc, required for 'make rel' target"
 	@echo "Consider '[apt-get|brew] install pandoc'"
@@ -25,7 +29,7 @@ compile:
 
 .PHONY: clean
 clean:
-	@find . -name "*.pyc" | xargs rm
+	@find . -name "*.pyc" -exec rm {} \;
 
 .PHONY: doc
 doc:
@@ -33,7 +37,7 @@ doc:
 
 .PHONY: test
 test:
-	@pytest
+	@python -m pytest
 
 # Note the Python version is in form 0.0.0 only, where we rely
 # on setuptools to normalise and remove the leading 'v'.

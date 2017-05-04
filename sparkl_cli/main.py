@@ -78,7 +78,7 @@ def parse_args():
     This calls out to each submodule to parse the command line
     arguments.
     """
-    prog_name = os.environ.get("SPARKL_PROG_NAME", None)
+    prog_name = os.environ.get("SPARKL_PROG_NAME")
     if not prog_name:
         prog_name = __package__
 
@@ -115,7 +115,8 @@ def parse_args():
             fun=submodule.command)
         submodule.parse_args(subparser)
 
-    return parser.parse_args()
+    return parser.parse_args(
+        namespace=common.get_args())
 
 
 def main():
@@ -129,7 +130,6 @@ def main():
     dispatches the specified command.
     """
     args = parse_args()
-    common.ARGS = args
 
     common.garbage_collect()
 
