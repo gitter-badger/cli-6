@@ -17,6 +17,7 @@ from sparkl_cli.cli_websocket import (
     CliWebsocket)
 
 from sparkl_cli.common import (
+    get_args,
     get_connection)
 
 from . import common
@@ -27,11 +28,23 @@ def parse_args(subparser):
     Adds module-specific subcommand arguments.
     """
     subparser.add_argument(
+        "-c", "--consume",
+        type=str,
+        default="Log",
+        help="Show events from the named consume operation only [Log]")
+
+    subparser.add_argument(
+        "-f", "--field",
+        type=str,
+        default="event",
+        help="Show value of the named field only [event]")
+
+    subparser.add_argument(
         "service",
         type=str,
         nargs="?",
         default="Scratch/TraceLogger",
-        help="Path or id of trace service, default 'Scratch/TraceLogger'")
+        help="Path or id of trace service [Scratch/TraceLogger]")
 
 
 def get_cli_ws():
@@ -63,8 +76,19 @@ def on_message(name, data):
     This is invoked for each message, with the name of the operation (e.g.
     the Log operation) and a dict of data fields keyed by name.
 
-    If there is one field, it is
+    If the -c or -f options are selected, filters the output appropriately.
     """
+    args = get_args()
+
+    if args.consume and name != args.consume:
+        return
+
+    if args.field:
+        value = data.get(args.field)
+        if value:
+            print(value, "", sep="\n")
+        return
+
     for key in data:
         value = data[key]
         print("{Name}[{Key}]".format(
@@ -82,15 +106,16 @@ def listen(cli_ws):
 
 def command():
     """
-    Opens a websocket listening to the specified REST service, most commonly
-    a tracelogger.
+    Opens a websocket listening to consume operations on the specified REST
+    service.
 
-    A tracelogger service has a single consume operation on it, where the
-    consume has the 'sse.log' property which marks it out as a log operation.
+    You can optionally filter out all but one consume operation and all but one
+    field, using the -c and -f arguments respectively.
 
-    It normally has a single input field whose name is generally 'event'.
-
-    The raw events are dumped to the standard output.
+    The default values of the REST service, the consume operation filter and
+    the field filter are set to "Scratch/Tracelogger", "Log" and "event"
+    respectively, since these are default entries in the user configuration
+    tree.
     """
     args = common.ARGS
     service = common.get_object(args.alias, args.service)

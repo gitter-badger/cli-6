@@ -59,7 +59,7 @@ MODULES = (
     ("undo", cmd_undo, "Undo last change"),
     ("vars", cmd_vars, "Set field variables"),
     ("call", cmd_call, "Invoke transaction or operation"),
-    ("listen", cmd_listen, "Listen to REST tracelogger service"))
+    ("listen", cmd_listen, "Listen on a provision='rest' service"))
 
 
 def get_version():
