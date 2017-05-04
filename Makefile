@@ -6,7 +6,7 @@ PY_VERSION := $(shell git describe --tags --abbrev=0)
 deps:
 ifeq  '$(shell which pip)'  ''
 	@echo "Missing pip, required for compile target"
-	@echo "Consider '[apt-get|brew] install pip'"
+	@echo "Consider '[apt-get|brew] install python-pip'"
 endif
 ifeq  '$(shell which pandoc)'  ''
 	@echo "Missing pandoc, required for 'make rel' target"
