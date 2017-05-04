@@ -10,9 +10,8 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     sync_request)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -31,7 +30,7 @@ def list_folder():
     """
     Lists the content of the folder specified in the args.
     """
-    args = common.ARGS
+    args = get_args()
     response = sync_request(
         args.alias, "GET", "sse_cfg/content/" + args.folder)
 

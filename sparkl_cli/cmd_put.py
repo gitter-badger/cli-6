@@ -10,9 +10,8 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     sync_request)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -34,7 +33,7 @@ def command():
     """
     Uploads SPARKL source or other valid XML change file.
     """
-    args = common.ARGS
+    args = get_args()
     with open(args.file, "rb") as upload_file:
         response = sync_request(
             args.alias, "POST", "sse_cfg/change/" + args.folder,

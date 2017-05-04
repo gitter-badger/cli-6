@@ -12,9 +12,8 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     sync_request)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -42,7 +41,7 @@ def show_login():
     Shows the logged in user on the connection specified in
     the args, or default.
     """
-    args = common.ARGS
+    args = get_args()
     response = sync_request(
         args.alias, "GET", "sse_cfg/user")
 
@@ -58,7 +57,7 @@ def login():
     Logs in the specified user, prompting for password
     if necessary.
     """
-    args = common.ARGS
+    args = get_args()
     if not args.password:
         args.password = getpass.getpass("Password: ")
 
@@ -79,7 +78,7 @@ def register():
     Registers the specified user, prompting twice for
     password if necessary.
     """
-    args = common.ARGS
+    args = get_args()
     if not args.password:
         args.password = getpass.getpass("Password: ")
         check = getpass.getpass("Repeat: ")
@@ -104,7 +103,7 @@ def command():
     Logs in or registers the user. If no user specified, shows
     the current login status.
     """
-    args = common.ARGS
+    args = get_args()
     if not args.user:
         show_login()
     elif args.register:

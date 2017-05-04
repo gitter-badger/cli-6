@@ -10,10 +10,9 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     get_object,
     show_struct)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -30,7 +29,7 @@ def command():
     """
     Shows detail about the specified object.
     """
-    args = common.ARGS
+    args = get_args()
     sparkl_object = get_object(args.alias, args.object)
     if sparkl_object:
         show_struct(sparkl_object)

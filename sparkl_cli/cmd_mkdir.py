@@ -13,9 +13,8 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     sync_request)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -37,7 +36,7 @@ def command():
     """
     Creates a new subfolder in the specified parent folder.
     """
-    args = common.ARGS
+    args = get_args()
     change = "<change><folder name=\"{Name}\"/></change>".format(
         Name=args.name)
 

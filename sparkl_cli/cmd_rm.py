@@ -15,9 +15,8 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     sync_request)
-
-from . import common
 
 
 def parse_args(subparser):
@@ -34,7 +33,7 @@ def command():
     """
     Deletes the specified configuration object.
     """
-    args = common.ARGS
+    args = get_args()
     folder = os.path.dirname(args.object)
     name = os.path.basename(args.object)
 

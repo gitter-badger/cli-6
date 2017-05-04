@@ -10,11 +10,10 @@ from sparkl_cli.cli_exception import (
     CliException)
 
 from sparkl_cli.common import (
+    get_args,
     get_state,
     set_state,
     delete_cookies)
-
-from . import common
 
 
 def parse_args(_):
@@ -28,8 +27,7 @@ def command():
     """
     Closes the connection with the given alias, if already open.
     """
-    args = common.ARGS
-
+    args = get_args()
     state = get_state()
     connections = state.get("connections", {})
 
