@@ -1,0 +1,28 @@
+"""
+Copyright (c) 2017 SPARKL Limited. All Rights Reserved.
+Author <jacoby@sparkl.com> Jacoby Thwaites.
+
+Setup specification for distutils.
+
+Please note this file has the version number replaced by
+the make target, and is copied to setup.py.
+"""
+from setuptools import setup, find_packages
+
+setup(
+  name="sparkl_cli",
+  description="SPARKL cli utility",
+  url="http://sparkl.com",
+  author="Jacoby Thwaites",
+  author_email="dev@sparkl.com",
+  version={{version}},
+  scripts=["sparkl"],
+  packages=find_packages(),
+  package_data={
+    "sparkl_cli": ["version.txt"]},
+  license="MIT",
+  install_requires=[
+    "argparse",
+    "psutil",
+    "requests"
+  ])

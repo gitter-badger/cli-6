@@ -1,3 +1,11 @@
+# setup.py is generated from setup.py.src by make rel target.
+setup.py
+MANIFEST
+sparkl_cli/version.txt
+
+# README.txt is generated using pandoc from README.md
+README.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -87,3 +95,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Mac files.
+.DS_Store
