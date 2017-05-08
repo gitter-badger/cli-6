@@ -4,6 +4,6 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 Package main module delegates to main implementation module.
 """
 
-from . import main
+from sparkl_cli import main
 
 main.main()

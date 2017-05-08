@@ -26,7 +26,7 @@ from sparkl_cli.common import (
     get_args,
     garbage_collect)
 
-from . import (
+from sparkl_cli import (
     cli_exception,
     cmd_connect,
     cmd_close,

@@ -6,7 +6,7 @@ Test module for common.py
 """
 import os
 
-from .. import common
+from sparkl_cli import common
 
 
 class Mock():

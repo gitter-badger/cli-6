@@ -20,7 +20,7 @@ from sparkl_cli.common import (
     get_args,
     get_connection)
 
-from . import common
+from sparkl_cli import common
 
 
 def parse_args(subparser):

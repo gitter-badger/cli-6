@@ -5,7 +5,7 @@ Author <jacoby@sparkl.com> Jacoby Thwaites.
 Test module connects to https://demo-instance.sparkl.com:9000
 and tests a series of commands.
 """
-from .. import main
+from sparkl_cli import main
 
 
 class Tests():
