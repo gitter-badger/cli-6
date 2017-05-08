@@ -18,6 +18,7 @@ endif
 	@pip install --user -q psutil
 	@pip install --user -q argparse
 	@pip install --user -q requests
+	@pip install --user -q websocket-client
 
 # Note the -v displayed version is in the form v0.0.0-n-hash
 .PHONY: compile

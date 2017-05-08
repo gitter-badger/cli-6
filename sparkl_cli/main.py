@@ -41,7 +41,8 @@ from . import (
     cmd_mkdir,
     cmd_undo,
     cmd_vars,
-    cmd_call)
+    cmd_call,
+    cmd_listen)
 
 MODULES = (
     ("connect", cmd_connect, "Create or show connections"),
@@ -57,7 +58,8 @@ MODULES = (
     ("mkdir", cmd_mkdir, "Create new folder"),
     ("undo", cmd_undo, "Undo last change"),
     ("vars", cmd_vars, "Set field variables"),
-    ("call", cmd_call, "Invoke transaction or operation"))
+    ("call", cmd_call, "Invoke transaction or operation"),
+    ("listen", cmd_listen, "Listen on a provision='rest' service"))
 
 
 def get_version():
