@@ -1,2 +1,2 @@
-# sparkl_cli
+# SPARKL CLI
 Console CLI interface for managing running SPARKL nodes
