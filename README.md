@@ -1,4 +1,6 @@
 # SPARKL CLI
+
+[![Join the chat at https://gitter.im/sparkl/cli](https://badges.gitter.im/sparkl/cli.svg)](https://gitter.im/sparkl/cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Console CLI interface for managing running SPARKL nodes.
 ## Build
 Use `make` as follows:
